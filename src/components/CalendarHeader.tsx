@@ -1,14 +1,11 @@
-import { Props } from '../typeUtils/types';
-import { middleCalendarDateNum } from '../constants';
+interface Props {
+    calendarDates: Date[], 
+    calendarYear: number,
+    calendarMonth: number,
+    changeMonth: (direction: 'next' | 'previous') => void
+};
 
-
-const CalendarHeader = (
-    props: Pick<Props, 
-    'calendarDates' |
-    'calendarYear' |
-    'calendarMonth' | 
-    'changeMonth' >
-) => {
+const CalendarHeader = (props: Props) => {
     
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'];

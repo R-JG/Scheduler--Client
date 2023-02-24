@@ -7,10 +7,3 @@ export interface SchedulerEvent {
 };
 
 export type NewSchedulerEvent = Omit<SchedulerEvent, 'eventId'>;
-
-export interface Props {
-    calendarDates: Date[], 
-    calendarYear: number,
-    calendarMonth: number,
-    changeMonth: (direction: 'next' | 'previous') => void
-};
