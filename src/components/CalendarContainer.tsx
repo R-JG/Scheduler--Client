@@ -4,6 +4,7 @@ import CalendarDate from './CalendarDate';
 import '../css/CalendarContainer.css';
 
 interface Props {
+    currentDate: Date,
     calendarDates: Date[], 
     calendarYear: number,
     calendarMonth: number,
@@ -27,6 +28,8 @@ const CalendarContainer = (props: Props) => {
                     <CalendarDate 
                         key={date.toDateString()} 
                         date={date}
+                        currentDate={props.currentDate}
+                        calendarMonth={props.calendarMonth}
                         selection={props.selection}
                         updateSelection={props.updateSelection}
                     />

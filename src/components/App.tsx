@@ -19,26 +19,27 @@ const App = () => {
     const [calendarDates, setCalendarDates] = useState(
         generateCalendarDates(currentDate.getFullYear(), currentDate.getMonth())
     );
-    const [calendarYear, setCalendarYear] = useState(
-        calendarDates[middleCalendarDateNum].getFullYear()
-    );
-    const [calendarMonth, setCalendarMonth] = useState(
-        calendarDates[middleCalendarDateNum].getMonth()
-    );
+    const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
+    const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
     const [selection, setSelection] = useState<Selection>(
         { source: 'Calendar', type: 'date', value: currentDate }
     );
+
+    useEffect(() => {
+        setCalendarYear(calendarDates[middleCalendarDateNum].getFullYear());
+        setCalendarMonth(calendarDates[middleCalendarDateNum].getMonth());
+    }, [calendarDates]);
 
     function changeMonth(direction: 'next' | 'previous'): void {
         switch (direction) {
             case 'next':
                 setCalendarDates(
-                    generateCalendarDates(calendarYear, calendarMonth + 1)
+                    generateCalendarDates(calendarYear, (calendarMonth + 1))
                 );
                 break;
             case 'previous': 
                 setCalendarDates(
-                    generateCalendarDates(calendarYear, calendarMonth - 1)
+                    generateCalendarDates(calendarYear, (calendarMonth - 1))
                 );
                 break;
             default: return;
@@ -52,6 +53,7 @@ const App = () => {
     return (
         <main className='App'>
             <CalendarContainer 
+                currentDate={currentDate}
                 calendarDates={calendarDates} 
                 calendarYear={calendarYear}
                 calendarMonth={calendarMonth}

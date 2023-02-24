@@ -3,6 +3,8 @@ import '../css/CalendarDate.css';
 
 interface Props {
     date: Date,
+    currentDate: Date,
+    calendarMonth: number,
     selection: Selection,
     updateSelection: (selectionObj: Selection) => void
 };
@@ -20,17 +22,31 @@ const CalendarDate = (props: Props) => {
         //updateEventFormTimesFromCalendar();
     };
 
-    const isSelectedDateClass = (): 'selected-date' | '' => {
+    const hasSelectedDateClass = (): 'selected-date' | '' => {
         if (props.selection.type !== 'date') return '';
         return (props.date.toDateString() === props.selection.value.toDateString())
             ? 'selected-date' 
             : '';
     };
 
+    const hasCurrentDateClass = (): 'current-date' | '' => {
+        return (props.date.toDateString() === props.currentDate.toDateString()) 
+        ? 'current-date'
+        : '';
+    };
+
+    const hasAlternateMonthClass = (): 'alternate-month' | '' => {
+        return (props.date.getMonth() !== props.calendarMonth)
+        ? 'alternate-month'
+        : '';
+    };
+
     return (
         <div className={
-            `CalendarDate 
-            ${isSelectedDateClass()}`}
+                `CalendarDate 
+                 ${hasSelectedDateClass()} 
+                 ${hasCurrentDateClass()} 
+                 ${hasAlternateMonthClass()}`}
             onMouseDown={handleMouseDown}
         >
             {props.date.getDate()}

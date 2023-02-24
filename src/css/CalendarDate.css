@@ -10,8 +10,6 @@
     z-index: 10;
 }
 
-/* Un-added in the component: */
-
 .current-date {
     background-color: rgba(135, 225, 255, 0.5);
 }
@@ -20,6 +18,8 @@
     color: rgb(77, 77, 77);
     background-color: rgba(222, 222, 222, 0.8);
 }
+
+/* Un-added in the component: */
 
 .form-date-selection {
     background-color: rgba(128, 128, 128, 0.5);
