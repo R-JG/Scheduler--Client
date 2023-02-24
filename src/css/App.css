@@ -1,0 +1,41 @@
+:root {
+    --foreground-color: #272d2d;
+    --background-color: #FEFCFB;
+    --accent-color: cadetblue;
+    --main-panel-height: 40rem;
+    --main-panel-width: 40rem;
+    --main-panel-border-radius: 2rem;
+    --main-panel-outline: 0.45rem solid var(--foreground-color);
+    --panel-item-outline: 0.09rem solid var(--foreground-color);
+}
+
+body {
+    margin: 0;
+}
+
+button {
+    color: var(--foreground-color);
+}
+  
+button:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+  
+button:active {
+    background-color: rgba(135, 225, 255, 0.3);
+}
+
+
+
+.App {
+    color: var(--foreground-color);
+    background-color: var(--background-color);
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* to copy: line 31 and down */

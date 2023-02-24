@@ -1,3 +1,5 @@
+import '../css/CalendarDate.css';
+
 interface Props {
     date: Date
 };

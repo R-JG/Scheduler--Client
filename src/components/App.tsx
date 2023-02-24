@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { middleCalendarDateNum, totalCalendarDatesNum } from '../constants';
 import CalendarContainer from './CalendarContainer';
+import '../css/App.css';
 
 
 const generateCalendarDates = (year: number, month: number): Date[] => {
@@ -41,14 +42,14 @@ const App = () => {
     };
 
     return (
-        <div className='App'>
+        <main className='App'>
             <CalendarContainer 
                 calendarDates={calendarDates} 
                 calendarYear={calendarYear}
                 calendarMonth={calendarMonth}
                 changeMonth={changeMonth} 
             />
-        </div>
+        </main>
     );
 };
 

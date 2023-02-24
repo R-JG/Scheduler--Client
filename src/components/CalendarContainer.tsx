@@ -1,5 +1,6 @@
 import CalendarHeader from './CalendarHeader';
 import CalendarDate from './CalendarDate';
+import '../css/CalendarContainer.css';
 
 interface Props {
     calendarDates: Date[], 

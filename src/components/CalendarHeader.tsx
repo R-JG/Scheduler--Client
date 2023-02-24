@@ -1,3 +1,5 @@
+import '../css/CalendarHeader.css';
+
 interface Props {
     calendarDates: Date[], 
     calendarYear: number,

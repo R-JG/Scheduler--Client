@@ -1,0 +1,19 @@
+.CalendarContainer {
+    color: var(--foreground-color);
+    box-sizing: border-box;
+    margin-inline: 1em;
+}
+
+.calendar-dates-container {
+    box-sizing: border-box;
+    height: var(--main-panel-height);
+    width: var(--main-panel-width);
+    outline: var(--main-panel-outline);
+    border-radius: var(--main-panel-border-radius);
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    overflow: hidden;
+}

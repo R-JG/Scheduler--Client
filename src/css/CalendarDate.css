@@ -1,0 +1,26 @@
+.CalendarDate {
+    padding-top: 0.3em;
+    padding-left: 0.7em;
+    outline: var(--panel-item-outline);
+    user-select: none;
+}
+
+/* Un-added in the component: */
+
+.selected-date {
+    border: 0.2em solid var( --accent-color);
+    z-index: 10;
+}
+
+.current-date {
+    background-color: rgba(135, 225, 255, 0.5);
+}
+
+.alternate-month {
+    color: rgb(77, 77, 77);
+    background-color: rgba(222, 222, 222, 0.8);
+}
+
+.form-date-selection {
+    background-color: rgba(128, 128, 128, 0.5);
+}
