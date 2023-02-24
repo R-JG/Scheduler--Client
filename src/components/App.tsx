@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Selection } from '../typeUtils/types';
 import { middleCalendarDateNum, totalCalendarDatesNum } from '../constants';
 import CalendarContainer from './CalendarContainer';
 import '../css/App.css';
@@ -24,6 +25,9 @@ const App = () => {
     const [calendarMonth, setCalendarMonth] = useState(
         calendarDates[middleCalendarDateNum].getMonth()
     );
+    const [selection, setSelection] = useState<Selection>(
+        { source: 'Calendar', type: 'date', value: currentDate }
+    );
 
     function changeMonth(direction: 'next' | 'previous'): void {
         switch (direction) {
@@ -41,13 +45,19 @@ const App = () => {
         };
     };
 
+    const updateSelection = (selectionObj: Selection): void => {
+        setSelection(selectionObj);
+    };
+
     return (
         <main className='App'>
             <CalendarContainer 
                 calendarDates={calendarDates} 
                 calendarYear={calendarYear}
                 calendarMonth={calendarMonth}
+                selection={selection}
                 changeMonth={changeMonth} 
+                updateSelection={updateSelection}
             />
         </main>
     );

@@ -1,3 +1,4 @@
+import { Selection } from '../typeUtils/types';
 import CalendarHeader from './CalendarHeader';
 import CalendarDate from './CalendarDate';
 import '../css/CalendarContainer.css';
@@ -6,7 +7,9 @@ interface Props {
     calendarDates: Date[], 
     calendarYear: number,
     calendarMonth: number,
-    changeMonth: (direction: 'next' | 'previous') => void
+    selection: Selection,
+    changeMonth: (direction: 'next' | 'previous') => void,
+    updateSelection: (selectionObj: Selection) => void
 };
 
 const CalendarContainer = (props: Props) => {
@@ -24,6 +27,8 @@ const CalendarContainer = (props: Props) => {
                     <CalendarDate 
                         key={date.toDateString()} 
                         date={date}
+                        selection={props.selection}
+                        updateSelection={props.updateSelection}
                     />
                 )}
             </div>
