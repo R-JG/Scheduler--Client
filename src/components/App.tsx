@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
 import { generateCalendarDates } from '../helpers';
 import { middleCalendarDateNum } from '../constants';
+import eventsService from '../services/eventsService';
 import CalendarContainer from './CalendarContainer';
 import EventCreationPanel from './EventCreationPanel';
 import '../css/App.css';
@@ -18,6 +19,7 @@ const App = () => {
     const [selection, setSelection] = useState<Selection>(
         { source: 'Calendar', type: 'date', value: currentDate }
     );
+    const [events, setEvents] = useState();
     const [ eventFormData, setEventFormData ] = useState<EventFormData>(
         { start: undefined, end: undefined, title: '', description: '' }
     );
