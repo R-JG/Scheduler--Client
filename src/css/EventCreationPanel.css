@@ -1,0 +1,155 @@
+.EventCreationPanel {
+    box-sizing: border-box;
+    width: var(--main-panel-width);
+    margin-block: 2em;
+}
+
+/* when createEventMode is false: */
+
+.event-creation-header {
+    min-height: 6rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.button--create-event {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.5em;
+    margin-left: 2.5em;
+    margin-bottom: 1em;
+    border-radius: 1em;
+    border: 0.18em solid #272d2d;
+    cursor: pointer;
+}
+
+/* when createEventMode is true: */
+
+.event-creation-form {
+    height: 100%;
+    width: 100%;
+    padding: 1em;
+    border-radius: var(--main-panel-border-radius);
+    outline: var(--main-panel-outline);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0.5em;
+}
+
+.event-creation-title-label {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+#event-creation-form--title {
+    background-color: transparent;
+    height: 1.5em;
+    width: 9em;
+    padding-inline: 0.5em;
+    border-radius: 0.7em;
+    border: 0.1em solid #272d2d;
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+}
+
+.event-creation-description-label {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+#event-creation-form--description {
+    background-color: transparent;
+    height: 1.5em;
+    min-height: 1.5em;
+    max-height: 9em;
+    min-width: 9em;
+    max-width: 9em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.1em solid #272d2d;
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+}
+
+.event-creation-start-label {
+    margin: 0;
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+.event-creation-form--start {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
+}
+
+.event-creation-end-label {
+    margin: 0;
+    grid-column: 4 / 5;
+    grid-row: 2 / 3;
+}
+
+.event-creation-form--end {
+    grid-column: 4 / 5;
+    grid-row: 3 / 4;
+}
+
+.button--add-event {
+    background-color: transparent;
+    font-weight: 700;
+    width: 7em;
+    margin: 0.5em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid #272d2d;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    cursor: pointer;
+}
+
+.button--cancel-event-creation {
+    background-color: transparent;
+    font-weight: 700;
+    height: 2em;
+    width: 2em;
+    margin: 0.5em;
+    border-radius: 0.7em;
+    border: 0.18em solid #272d2d;
+    grid-column: 4 / 5;
+    grid-row: 1 / 2;
+    place-self: end;
+    cursor: pointer;
+}
+
+.button--set-start-time--EventCreationPanel {
+    background-color: transparent;
+    font-weight: 700;
+    width: 8em;
+    margin: 0.25em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid #272d2d;
+    grid-column: 3 / 4;
+    grid-row: 3 /4;
+    cursor: pointer;
+}
+
+.button--set-end-time--EventCreationPanel {
+    background-color: transparent;
+    font-weight: 700;
+    width: 8em;
+    margin: 0.25em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid #272d2d;
+    grid-column: 4 / 5;
+    grid-row: 3 / 4;
+    cursor: pointer;
+}
+
+.event-creation-form--date-text {
+    margin-bottom: 0.5em;
+}

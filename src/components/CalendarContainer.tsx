@@ -1,4 +1,4 @@
-import { Selection } from '../typeUtils/types';
+import { EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
 import CalendarHeader from './CalendarHeader';
 import CalendarDate from './CalendarDate';
 import '../css/CalendarContainer.css';
@@ -9,8 +9,11 @@ interface Props {
     calendarYear: number,
     calendarMonth: number,
     selection: Selection,
+    eventFormData: EventFormData,
+    timeSelectMode: TimeSelectMode,
     changeMonth: (direction: 'next' | 'previous') => void,
-    updateSelection: (selectionObj: Selection) => void
+    setSelection: (selection: Selection) => void,
+    updateEventFormTimes: (date: Date) => void
 };
 
 const CalendarContainer = (props: Props) => {
@@ -30,8 +33,11 @@ const CalendarContainer = (props: Props) => {
                         date={date}
                         currentDate={props.currentDate}
                         calendarMonth={props.calendarMonth}
+                        eventFormData={props.eventFormData}
                         selection={props.selection}
-                        updateSelection={props.updateSelection}
+                        timeSelectMode={props.timeSelectMode}
+                        setSelection={props.setSelection}
+                        updateEventFormTimes={props.updateEventFormTimes}
                     />
                 )}
             </div>
