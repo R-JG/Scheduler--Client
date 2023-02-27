@@ -12,6 +12,7 @@ interface Props {
     setCreateEventMode: (boolean: boolean) => void,
     setTimeSelectMode: (params: TimeSelectMode) => void,
     updateEventFormValue: (name: string, value: string | Date) => void,
+    addNewEvent: () => void,
     clearEventFormData: () => void
 };
 
@@ -36,7 +37,7 @@ const EventCreationPanel = (props: Props) => {
             || (props.eventFormData.end === undefined)
             || (props.eventFormData.title === '')
         ) return;
-        // addNewEvent();
+        props.addNewEvent();
         closeCreateEventForm();
     };
 

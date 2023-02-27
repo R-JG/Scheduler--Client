@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import { EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
-import { generateCalendarDates } from '../helpers';
+import { Event, NewEvent, EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
+import { 
+    generateCalendarDates, 
+    getRandomHSLColor, 
+    convertDbFormatToEvent, 
+    convertNewEventToDbFormat 
+} from '../helpers';
 import { middleCalendarDateNum } from '../constants';
 import eventsService from '../services/eventsService';
+import validation from '../typeUtils/validation';
 import CalendarContainer from './CalendarContainer';
 import EventCreationPanel from './EventCreationPanel';
 import '../css/App.css';
@@ -19,7 +25,7 @@ const App = () => {
     const [selection, setSelection] = useState<Selection>(
         { source: 'Calendar', type: 'date', value: currentDate }
     );
-    const [events, setEvents] = useState();
+    const [events, setEvents] = useState<Event[]>([]);
     const [ eventFormData, setEventFormData ] = useState<EventFormData>(
         { start: undefined, end: undefined, title: '', description: '' }
     );
@@ -35,6 +41,21 @@ const App = () => {
         setCalendarMonth(calendarDates[middleCalendarDateNum].getMonth());
     }, [calendarDates]);
 
+    useEffect(() => {
+        const response = eventsService.getAllEvents();
+        response.then(dbEventsArray => {
+            if (dbEventsArray) {
+                const eventsArray = dbEventsArray.map(dbEvent => 
+                    convertDbFormatToEvent(dbEvent)
+                );
+                setEvents(eventsArray);
+            };
+        });
+    }, []);
+
+
+    console.log(events);
+    
 
     const changeMonth = (direction: 'next' | 'previous'): void => {
         switch (direction) {
@@ -80,25 +101,21 @@ const App = () => {
         );
     };
 
-    /*
     const addNewEvent = (): void => {
-        const newEvent = {
+        const newEvent = validation.parseNewEvent({
             ...eventFormData,
-            id: nanoid(),
             color: getRandomHSLColor()
-        };
-        setEvents((prevEvents) => [
-            ...prevEvents,
-            newEvent
-        ]);
+        });
+        const dbEvent = convertNewEventToDbFormat(newEvent);
+        const response = eventsService.addEvent(dbEvent);
+        response.then(addedDbEvent => {
+            if (addedDbEvent) {
+                const addedEvent = convertDbFormatToEvent(addedDbEvent);
+                setEvents(events.concat(addedEvent));
+            } else return console.log('added event is undefined');
+        });
     };
-    */
 
-    console.log(createEventMode);
-    console.log(eventFormData);
-    console.log(timeSelectMode);
-    
-    
 
     return (
         <main className='App'>
@@ -122,6 +139,7 @@ const App = () => {
                 setCreateEventMode={setCreateEventMode}
                 setTimeSelectMode={setTimeSelectMode}
                 updateEventFormValue={updateEventFormValue}
+                addNewEvent={addNewEvent}
                 clearEventFormData={clearEventFormData}
             />
         </main>

@@ -1,17 +1,19 @@
-export interface DbFormatEvent {
+export interface DbFormattedEvent {
     eventId: string,
     title: string,
     description: string,
+    color: string,
     startMilliseconds: number,
     endMilliseconds: number
-}; 
+};
 
-export type NewDbFormatEvent = Omit<DbFormatEvent, 'eventId'>;
+export type NewDbFormattedEvent = Omit<DbFormattedEvent, 'eventId'>;
 
 export interface Event {
     eventId: string,
     title: string,
     description: string,
+    color: string,
     start: Date,
     end: Date
 };

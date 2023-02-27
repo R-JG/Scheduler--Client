@@ -1,19 +1,31 @@
 import axios from 'axios';
-import { Event, NewEvent } from '../typeUtils/types';
+import { DbFormattedEvent, NewDbFormattedEvent } from '../typeUtils/types';
 import validation from '../typeUtils/validation';
 
-const baseUrl = 'http://localhost:3000/api/events';
+const baseUrl = '/api/events';
 
-const getAllEvents = async (): Promise<Event[]> => {
-    const response = await axios.get(baseUrl);
-    const eventsArray = validation.parseEventsAray(response.data);
-    return eventsArray;
+const getAllEvents = async (): Promise<DbFormattedEvent[] | undefined> => {
+    try {
+        const response = await axios.get(baseUrl, { validateStatus: status => status < 400 });
+        const dbEventsArray = validation.parseDbEventsArray(response.data);
+        return dbEventsArray;
+    } catch (error: any) {
+        console.log(error.message);
+    };
 };
 
-const createEvent = async (newEvent: NewEvent): Promise<Event> => {
-    const response = await axios.post(baseUrl, newEvent);
-    const addedEvent = validation.parseEvent(response.data);
-    return addedEvent;
+const addEvent = async (newDbEvent: NewDbFormattedEvent): Promise<DbFormattedEvent | undefined> => {
+    try {
+        const response = await axios.post(
+            baseUrl, 
+            newDbEvent, 
+            { validateStatus: status => status < 400 }
+        );
+        const addedDbEvent = validation.parseDbFormattedEvent(response.data);
+        return addedDbEvent;
+    } catch (error: any) {
+        console.log(error.message);
+    };
 };
 
-export default { getAllEvents, createEvent };
+export default { getAllEvents, addEvent };
