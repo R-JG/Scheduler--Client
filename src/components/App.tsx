@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Event, NewEvent, EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
+import { Event, EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
 import { 
     generateCalendarDates, 
     getRandomHSLColor, 
     convertDbFormatToEvent, 
     convertNewEventToDbFormat 
 } from '../helpers';
-import { middleCalendarDateNum } from '../constants';
+import { middleCalendarDateNum,millisecondsInADay } from '../constants';
 import eventsService from '../services/eventsService';
 import validation from '../typeUtils/validation';
 import CalendarContainer from './CalendarContainer';
@@ -26,6 +26,7 @@ const App = () => {
         { source: 'Calendar', type: 'date', value: currentDate }
     );
     const [events, setEvents] = useState<Event[]>([]);
+    const [eventsOnCalendar, setEventsOnCalendar] = useState<Event[]>([]);
     const [ eventFormData, setEventFormData ] = useState<EventFormData>(
         { start: undefined, end: undefined, title: '', description: '' }
     );
@@ -53,9 +54,15 @@ const App = () => {
         });
     }, []);
 
+    useEffect(() => {
+        const eventsWithinCalendarRange = events.filter(event => 
+            !((event.end.valueOf() <= calendarDates[0].valueOf()) 
+            || (event.start.valueOf() >= 
+            (calendarDates[calendarDates.length - 1].valueOf() + millisecondsInADay)))
+        );
+        setEventsOnCalendar(eventsWithinCalendarRange);
+    }, [calendarDates, events]);
 
-    console.log(events);
-    
 
     const changeMonth = (direction: 'next' | 'previous'): void => {
         switch (direction) {
@@ -116,6 +123,10 @@ const App = () => {
         });
     };
 
+    console.log('events:   ', events);
+    console.log('events on calendar:   ', eventsOnCalendar);
+    
+
 
     return (
         <main className='App'>
@@ -124,8 +135,11 @@ const App = () => {
                 calendarDates={calendarDates} 
                 calendarYear={calendarYear}
                 calendarMonth={calendarMonth}
-                eventFormData={eventFormData}
                 selection={selection}
+                events={events}
+                eventsOnCalendar={eventsOnCalendar}
+                eventFormData={eventFormData}
+                editEventMode={editEventMode}
                 timeSelectMode={timeSelectMode}
                 changeMonth={changeMonth} 
                 setSelection={setSelection}
