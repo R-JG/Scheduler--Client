@@ -9,8 +9,14 @@ interface EventObject {
     isFirstRow: boolean
 };
 
+interface EventStyle {
+    gridColumn: string,
+    gridRow: string,
+    backgroundColor: string
+};
+
 interface Props {
-    eventObjects: EventObject[],
+    eventRowObjects: EventObject[],
     selection: Selection,
     eventFormData: EventFormData,
     editEventMode: boolean,
@@ -19,22 +25,31 @@ interface Props {
 
 const CalendarEventsRow = (props: Props) => {
 
-    /*
-    const handleEventRowClick = (event) => {
-        if (editEventMode && (eventFormData.id !== event.id)) return;
-        updateSelection('event', event);
-    };
+    const getGridRowNumber = (
+            eventObj: EventObject, eventObjIndex: number
+        ): number => props.eventRowObjects.reduce((overlapCount, reduceEventObj, reduceIndex) => 
+        ((reduceIndex < eventObjIndex) 
+        && (reduceEventObj.columnStart < eventObj.columnEnd) 
+        && (reduceEventObj.columnEnd > eventObj.columnStart)) 
+            ? (overlapCount + 1) : overlapCount
+    , 1);
 
-    const hasSelectedEventClass = (event) => {
-        if (selection.type !== 'event') return;
-        return (selection.value.id === event.id)
-            ? 'selected-event' 
-            : '';
-    };
-    */
+    const createEventStyleObject = (
+            eventRowObject: EventObject, gridRowBase: number
+        ): EventStyle => ({
+        gridColumn: `${eventRowObject.columnStart} / ${eventRowObject.columnEnd}`,
+        gridRow: `${gridRowBase} / ${gridRowBase + 1}`,
+        backgroundColor: eventRowObject.event.color
+    });
 
     return (
-        <div></div>
+        <div className='CalendarEventsRow'>
+            {props.eventRowObjects.map((event, index) => 
+                <CalendarEventElement 
+                    style={createEventStyleObject(event, getGridRowNumber(event, index))}
+                />
+            )}
+        </div>
     );
 };
 

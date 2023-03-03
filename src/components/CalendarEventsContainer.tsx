@@ -49,9 +49,7 @@ const CalendarEventsContainer = (props: Props) => {
     };
 
     const createEventObject = (
-            event: Event, 
-            dateCoordinates: DateGridItem, 
-            isFirstRow: boolean
+            event: Event, dateCoordinates: DateGridItem, isFirstRow: boolean
         ): EventObject => {
         return {
             event,
@@ -64,7 +62,7 @@ const CalendarEventsContainer = (props: Props) => {
 
     const eventObjectsPerEvent: EventObject[] = props.eventsOnCalendar.map(event => {
         const eventDateCoordinates: DateGridItem[] = getDateCoordinatesForEvent(event);
-        const accumulator: EventObject[] = [];
+        const initialValue: EventObject[] = [];
         const eventObjects: EventObject[] = eventDateCoordinates.reduce(
             (eventObjectsArray, dateCoordinates) => {
                 const latestElIndex = eventObjectsArray.length - 1;
@@ -82,19 +80,19 @@ const CalendarEventsContainer = (props: Props) => {
                         createEventObject(event, dateCoordinates, (eventObjectsArray.length === 0))
                     );
                 };
-        }, accumulator);
+        }, initialValue);
         return eventObjects;
     }).flat();
 
     const calendarEventRows: EventObject[][] = Array.from(
         { length: calendarHeightNum }, () => []
     ).map((_calendarRow, index) => {
-        const eventsInCalendarRow = eventObjectsPerEvent.filter(eventObj => 
+        const eventsInCalendarRow: EventObject[] = eventObjectsPerEvent.filter(eventObj => 
             eventObj.rowStart === (index + 1)
         );
-        const eventObjectsByLength = eventsInCalendarRow.sort((a, b) => {
-            const aLength = a.columnEnd - a.columnStart;
-            const bLength = b.columnEnd - b.columnStart;
+        const eventObjectsByLength: EventObject[] = eventsInCalendarRow.sort((a, b) => {
+            const aLength: number = a.columnEnd - a.columnStart;
+            const bLength: number = b.columnEnd - b.columnStart;
             return (bLength > aLength) ? 1 : -1;
         });
         return eventObjectsByLength;
@@ -110,7 +108,7 @@ const CalendarEventsContainer = (props: Props) => {
         <div className='CalendarEventsContainer'>
             {calendarEventRows.map(calendarEventRow => 
                 <CalendarEventsRow 
-                    eventObjects={calendarEventRow}
+                    eventRowObjects={calendarEventRow}
                     selection={props.selection}
                     eventFormData={props.eventFormData}
                     editEventMode={props.editEventMode}
