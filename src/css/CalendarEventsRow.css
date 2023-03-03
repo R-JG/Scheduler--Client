@@ -1,0 +1,15 @@
+.CalendarEventsRow {
+    padding-top: 2em;
+    padding-bottom: 1em;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 0.5em;
+    row-gap: 0;
+    overflow: hidden;
+    transition: 0.35s ease;
+}
+
+.CalendarEventsRow:hover {
+    row-gap: 1em;
+    overflow: scroll;
+}

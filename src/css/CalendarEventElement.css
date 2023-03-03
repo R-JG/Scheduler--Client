@@ -1,0 +1,23 @@
+.CalendarEventElement {
+    box-sizing: border-box;
+    height: 1.5em;
+    border: 0.2em solid transparent;
+    border-radius: 0.7em;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    pointer-events: all;
+    user-select: none;
+    cursor: pointer;
+}
+
+.calendar-event-title {
+    font-size: 0.75em;
+    margin-inline: 1em;
+}
+
+.selected-event {
+    border-color: var(--accent-color);
+}

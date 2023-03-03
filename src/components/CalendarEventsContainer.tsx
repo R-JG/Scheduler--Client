@@ -1,6 +1,7 @@
 import { Event, Selection, EventFormData } from '../typeUtils/types';
 import { calendarHeightNum, calendarWidthNum } from '../constants';
 import CalendarEventsRow from './CalendarEventsRow';
+import '../css/CalendarEventsContainer.css';
 
 interface DateGridItem {
     date: Date,

@@ -1,4 +1,6 @@
 :root {
+    --calendar-height-ammount: 6;
+    --calendar-width-ammount: 7;
     --foreground-color: #272d2d;
     --background-color: #FEFCFB;
     --accent-color: cadetblue;

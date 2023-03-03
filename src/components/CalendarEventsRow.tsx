@@ -1,5 +1,6 @@
 import { Event, Selection, EventFormData } from '../typeUtils/types';
 import CalendarEventElement from './CalendarEventElement';
+import '../css/CalendarEventsRow.css';
 
 interface EventObject {
     event: Event,
@@ -27,11 +28,12 @@ const CalendarEventsRow = (props: Props) => {
 
     const getGridRowNumber = (
             eventObj: EventObject, eventObjIndex: number
-        ): number => props.eventRowObjects.reduce((overlapCount, reduceEventObj, reduceIndex) => 
-        ((reduceIndex < eventObjIndex) 
-        && (reduceEventObj.columnStart < eventObj.columnEnd) 
-        && (reduceEventObj.columnEnd > eventObj.columnStart)) 
-            ? (overlapCount + 1) : overlapCount
+        ): number => props.eventRowObjects.reduce(
+        (overlapCount, reduceEventObj, reduceIndex) => 
+            ((reduceIndex < eventObjIndex) 
+            && (reduceEventObj.columnStart < eventObj.columnEnd) 
+            && (reduceEventObj.columnEnd > eventObj.columnStart)) 
+                ? (overlapCount + 1) : overlapCount
     , 1);
 
     const createEventStyleObject = (
@@ -44,9 +46,15 @@ const CalendarEventsRow = (props: Props) => {
 
     return (
         <div className='CalendarEventsRow'>
-            {props.eventRowObjects.map((event, index) => 
+            {props.eventRowObjects.map((eventObject, index) => 
                 <CalendarEventElement 
-                    style={createEventStyleObject(event, getGridRowNumber(event, index))}
+                    eventObject={eventObject}
+                    style={createEventStyleObject(
+                        eventObject, getGridRowNumber(eventObject, index)
+                    )}
+                    eventFormData={props.eventFormData}
+                    editEventMode={props.editEventMode}
+                    setSelection={props.setSelection}
                 />
             )}
         </div>

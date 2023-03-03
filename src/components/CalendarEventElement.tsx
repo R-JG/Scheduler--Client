@@ -1,3 +1,14 @@
+import { Event, EventFormData, Selection } from '../typeUtils/types';
+import '../css/CalendarEventElement.css';
+
+interface EventObject {
+    event: Event,
+    columnStart: number,
+    columnEnd: number,
+    rowStart: number,
+    isFirstRow: boolean
+};
+
 interface EventStyle {
     gridColumn: string,
     gridRow: string,
@@ -5,15 +16,22 @@ interface EventStyle {
 };
 
 interface Props {
-    style: EventStyle
+    eventObject: EventObject,
+    style: EventStyle,
+    eventFormData: EventFormData,
+    editEventMode: boolean,
+    setSelection: (selection: Selection) => void
 };
 
 const CalendarEventElement = (props: Props) => {
 
     /*
-    const handleEventRowClick = (event) => {
-        if (editEventMode && (eventFormData.id !== event.id)) return;
-        updateSelection('event', event);
+    const handleEventClick = (): void => {
+        if (props.editEventMode 
+        && (props.eventFormData.id !== props.eventObject.event.id)) return;
+        props.setSelection(
+            { source: 'Calendar', type: 'event', value: props.eventObject.event }
+        );
     };
 
     const hasSelectedEventClass = (event) => {
@@ -28,6 +46,10 @@ const CalendarEventElement = (props: Props) => {
         <div 
             className='CalendarEventElement' 
             style={props.style}>
+            {props.eventObject.isFirstRow && 
+            <div className='calendar-event-title'>
+                {props.eventObject.event.title}
+            </div>}
         </div>
     );
 };
