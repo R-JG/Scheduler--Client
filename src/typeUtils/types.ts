@@ -21,6 +21,7 @@ export interface Event {
 export type NewEvent = Omit<Event, 'eventId'>;
 
 export interface EventFormData {
+    eventId?: string,
     title: string,
     description: string,
     start: undefined | Date,

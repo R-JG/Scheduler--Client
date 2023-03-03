@@ -52,6 +52,7 @@ const CalendarEventsRow = (props: Props) => {
                     style={createEventStyleObject(
                         eventObject, getGridRowNumber(eventObject, index)
                     )}
+                    selection={props.selection}
                     eventFormData={props.eventFormData}
                     editEventMode={props.editEventMode}
                     setSelection={props.setSelection}
