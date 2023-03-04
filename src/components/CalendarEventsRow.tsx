@@ -48,6 +48,7 @@ const CalendarEventsRow = (props: Props) => {
         <div className='CalendarEventsRow'>
             {props.eventRowObjects.map((eventObject, index) => 
                 <CalendarEventElement 
+                    key={eventObject.event.eventId}
                     eventObject={eventObject}
                     style={createEventStyleObject(
                         eventObject, getGridRowNumber(eventObject, index)

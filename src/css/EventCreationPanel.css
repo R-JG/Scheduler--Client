@@ -1,7 +1,7 @@
 .EventCreationPanel {
     box-sizing: border-box;
     width: var(--main-panel-width);
-    margin-block: 2em;
+    grid-area: event-creation-panel;
 }
 
 /* when createEventMode is false: */
@@ -29,9 +29,12 @@
 /* when createEventMode is true: */
 
 .event-creation-form {
+    box-sizing: border-box;
     height: 100%;
     width: 100%;
     padding: 1em;
+    margin-top: 2em;
+    margin-bottom: 2.6em;
     border-radius: var(--main-panel-border-radius);
     outline: var(--main-panel-outline);
     display: grid;

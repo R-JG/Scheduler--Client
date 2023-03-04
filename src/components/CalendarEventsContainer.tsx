@@ -99,16 +99,11 @@ const CalendarEventsContainer = (props: Props) => {
         return eventObjectsByLength;
     });
 
-
-    console.log('date grid coordinates:    ', dateGridCoordinates);
-    console.log('first processing of events:    ', eventObjectsPerEvent);
-    console.log('end product of calendar events:    ', calendarEventRows);
-    
-
     return (
         <div className='CalendarEventsContainer'>
-            {calendarEventRows.map(calendarEventRow => 
+            {calendarEventRows.map((calendarEventRow, index) => 
                 <CalendarEventsRow 
+                    key={index}
                     eventRowObjects={calendarEventRow}
                     selection={props.selection}
                     eventFormData={props.eventFormData}

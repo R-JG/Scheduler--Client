@@ -11,6 +11,7 @@ import eventsService from '../services/eventsService';
 import validation from '../typeUtils/validation';
 import CalendarContainer from './CalendarContainer';
 import EventCreationPanel from './EventCreationPanel';
+import DayPanel from './DayPanel';
 import '../css/App.css';
 
 
@@ -27,7 +28,7 @@ const App = () => {
     );
     const [events, setEvents] = useState<Event[]>([]);
     const [eventsOnCalendar, setEventsOnCalendar] = useState<Event[]>([]);
-    const [ eventFormData, setEventFormData ] = useState<EventFormData>(
+    const [eventFormData, setEventFormData] = useState<EventFormData>(
         { start: undefined, end: undefined, title: '', description: '' }
     );
     const [createEventMode, setCreateEventMode] = useState(false);
@@ -123,11 +124,6 @@ const App = () => {
         });
     };
 
-    console.log('events:   ', events);
-    console.log('events on calendar:   ', eventsOnCalendar);
-    
-
-
     return (
         <main className='App'>
             <CalendarContainer 
@@ -155,6 +151,13 @@ const App = () => {
                 updateEventFormValue={updateEventFormValue}
                 addNewEvent={addNewEvent}
                 clearEventFormData={clearEventFormData}
+            />
+            <DayPanel 
+                currentDate={currentDate}
+                calendarDates={calendarDates}
+                eventsOnCalendar={eventsOnCalendar}
+                selection={selection}
+                editEventMode={editEventMode}
             />
         </main>
     );

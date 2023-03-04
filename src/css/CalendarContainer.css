@@ -2,6 +2,7 @@
     color: var(--foreground-color);
     box-sizing: border-box;
     margin-inline: 1em;
+    grid-area: calendar;
 }
 
 .calendar-dates-container {

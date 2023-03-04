@@ -1,0 +1,12 @@
+.DayPanel {
+    box-sizing: border-box;
+    max-height: var(--main-panel-height);
+    width: var(--main-panel-width);
+    margin-inline: 1em;
+    border-radius: var(--main-panel-border-radius);
+    outline: var(--main-panel-outline);
+    grid-area: day-panel;
+    overflow: scroll;
+    position: relative;
+    pointer-events: none;
+}

@@ -20,6 +20,13 @@ export const getRandomHSLColor = (): string => {
     return `hsl(${randomNumber}, 100%, 50%)`;
 };
 
+export const getHourString = (hour: number): string => {
+    if (hour === 0) return '12:00 AM';
+    if (hour === 12) return '12:00 PM';
+    if (hour > 12) return `${hour - 12}:00 PM`;
+    return `${hour}:00 AM`;
+};
+
 export const convertNewEventToDbFormat = (eventObj: NewEvent): NewDbFormattedEvent => {
     const dbEvent: any = { 
         ...eventObj,
