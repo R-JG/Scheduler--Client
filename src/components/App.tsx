@@ -81,7 +81,7 @@ const App = () => {
         };
     };
 
-    const updateEventFormValue = (name: string, value: string | Date): void => {
+    const updateEventFormProperty = (name: string, value: string | Date): void => {
         setEventFormData({
             ...eventFormData,
             [name]: value
@@ -92,11 +92,11 @@ const App = () => {
         if (timeSelectMode.start) {
             if ((eventFormData.end !== undefined) 
             && (date.valueOf() > eventFormData.end.valueOf())) return;
-            updateEventFormValue('start', date);
+            updateEventFormProperty('start', date);
         } else if (timeSelectMode.end) {
             if ((eventFormData.start !== undefined)
             && (date.valueOf() < eventFormData.start.valueOf())) return;
-            updateEventFormValue('end', date);
+            updateEventFormProperty('end', date);
         } else return; 
         if ((timeSelectMode.start) && (eventFormData.end === undefined)) {
             setTimeSelectMode({ start: false, end: true });
@@ -124,6 +124,9 @@ const App = () => {
         });
     };
 
+    console.log(selection);
+    
+
     return (
         <main className='App'>
             <CalendarContainer 
@@ -148,16 +151,21 @@ const App = () => {
                 timeSelectMode={timeSelectMode}
                 setCreateEventMode={setCreateEventMode}
                 setTimeSelectMode={setTimeSelectMode}
-                updateEventFormValue={updateEventFormValue}
+                updateEventFormProperty={updateEventFormProperty}
                 addNewEvent={addNewEvent}
                 clearEventFormData={clearEventFormData}
             />
             <DayPanel 
                 currentDate={currentDate}
                 calendarDates={calendarDates}
+                calendarMonth={calendarMonth}
                 eventsOnCalendar={eventsOnCalendar}
                 selection={selection}
                 editEventMode={editEventMode}
+                createEventMode={createEventMode}
+                timeSelectMode={timeSelectMode}
+                setSelection={setSelection}
+                updateEventFormTimes={updateEventFormTimes}
             />
         </main>
     );

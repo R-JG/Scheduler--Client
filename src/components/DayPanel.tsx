@@ -1,14 +1,20 @@
-import { useRef, useEffect } from 'react';
-import { Event, Selection } from '../typeUtils/types';
+import { useRef, useEffect, MouseEvent } from 'react';
+import { Event, Selection, TimeSelectMode } from '../typeUtils/types';
+import { millisecondsInAnHour } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
 import '../css/DayPanel.css';
 
 interface Props {
     currentDate: Date,
     calendarDates: Date[],
+    calendarMonth: number,
     eventsOnCalendar: Event[],
     selection: Selection,
-    editEventMode: boolean
+    editEventMode: boolean,
+    createEventMode: boolean,
+    timeSelectMode: TimeSelectMode,
+    setSelection: (selection: Selection) => void,
+    updateEventFormTimes: (date: Date) => void
 };
 
 const DayPanel = (props: Props) => {
@@ -51,7 +57,7 @@ const DayPanel = (props: Props) => {
     const scrollToEvent = (event: Event): void => {
         /* 
             ############# Disabled until events are added #############
-            
+
         const eventIndex = props.eventsOnCalendar.findIndex(eventOnCalendar => (
             event.eventId === eventOnCalendar.eventId
         ));
@@ -61,17 +67,44 @@ const DayPanel = (props: Props) => {
         );
         */
     };
-    
+
+    const createIdString = (date: Date, hourValue: number): string => {
+        return `${date.valueOf()} ${hourValue}`;
+    };
+
+    // assumes that the id is a string consisting in a date in milliseconds, a space, and an hour number.
+    const delegateHourClick = (e: MouseEvent<HTMLElement>): void => {
+        if ((!(e.target instanceof HTMLElement)) 
+        || (!(e.target.classList.contains('DayPanelHour')))) return;
+        const idValues: string[] = e.target.id.split(' ');
+        const hourValue: number = Number(idValues[idValues.length - 1]);
+        const dateValue: number = Number(idValues[0]);
+        const newDate: Date = new Date(dateValue + (hourValue * millisecondsInAnHour));
+        if ((props.editEventMode || props.createEventMode)
+        && (props.timeSelectMode.start || props.timeSelectMode.end)) {
+            props.updateEventFormTimes(newDate);
+        } else {
+            props.setSelection({ source: 'DayPanel', type: 'date', value: newDate });
+        };
+    };
+
+
+    /* add form selection marker - make it a function that sets a local state bool,
+     and then define the element inside the container with a conditional based on state */
+
     return (
         <div 
             className='DayPanel'
             ref={dayPanelRef}
+            onClick={delegateHourClick}
         >
             <div className='hour-blocks-container'>
                 {props.calendarDates.map(date => 
                     <DayPanelHourBlock 
                         key={date.toDateString()}
                         date={date}
+                        calendarMonth={props.calendarMonth}
+                        createIdString={createIdString}
                     />
                 )}
             </div>

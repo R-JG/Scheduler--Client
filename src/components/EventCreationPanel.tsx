@@ -11,7 +11,7 @@ interface Props {
     timeSelectMode: TimeSelectMode,
     setCreateEventMode: (boolean: boolean) => void,
     setTimeSelectMode: (params: TimeSelectMode) => void,
-    updateEventFormValue: (name: string, value: string | Date) => void,
+    updateEventFormProperty: (name: string, value: string | Date) => void,
     addNewEvent: () => void,
     clearEventFormData: () => void
 };
@@ -28,7 +28,7 @@ const EventCreationPanel = (props: Props) => {
 
     const handleFormChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const { name, value } = e.target;
-        props.updateEventFormValue(name, value);
+        props.updateEventFormProperty(name, value);
     };
 
     const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {

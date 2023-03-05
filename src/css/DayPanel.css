@@ -10,3 +10,7 @@
     position: relative;
     pointer-events: none;
 }
+
+.hour-blocks-container {
+    pointer-events: none;
+}
