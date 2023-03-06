@@ -161,6 +161,7 @@ const App = () => {
                 calendarMonth={calendarMonth}
                 eventsOnCalendar={eventsOnCalendar}
                 selection={selection}
+                eventFormData={eventFormData}
                 editEventMode={editEventMode}
                 createEventMode={createEventMode}
                 timeSelectMode={timeSelectMode}

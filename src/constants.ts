@@ -9,3 +9,5 @@ export const middleCalendarDateNum = Math.floor(totalCalendarDatesNum / 2);
 export const millisecondsInADay = 86400000;
 
 export const millisecondsInAnHour = 3600000;
+
+export const millisecondsInAMinute = 60000;

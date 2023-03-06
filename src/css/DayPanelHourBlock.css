@@ -10,3 +10,23 @@
     left: 40%;
     user-select: none;
 }
+
+.day-panel-hour {
+    height: var(--hour-height);
+    /*border: 0.075em solid #272d2d;*/
+    outline: var(--panel-item-outline);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    pointer-events: all;
+}
+
+.hour-text {
+    font-size: 0.8em;
+    padding-block: 0.7em;
+    padding-inline: 1em;
+    pointer-events: none;
+    user-select: none;
+}

@@ -14,3 +14,20 @@
 .hour-blocks-container {
     pointer-events: none;
 }
+
+.selection-marker-container {
+    width: 100%;
+    position: absolute;
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    grid-template-rows: repeat(calc(
+        var(--calendar-total-ammount) * var(--hour-block-ammount)), 
+        var(--hour-height)
+    );
+    pointer-events: none;
+}
+
+.selection-marker {
+    grid-column: 1 / 2;
+    background-color: rgba(128, 128, 128, 0.5);
+}

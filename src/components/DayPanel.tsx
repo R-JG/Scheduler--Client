@@ -1,6 +1,6 @@
-import { useRef, useEffect, MouseEvent } from 'react';
-import { Event, Selection, TimeSelectMode } from '../typeUtils/types';
-import { millisecondsInAnHour } from '../constants';
+import { useState, useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
+import { Event, Selection, EventFormData, TimeSelectMode } from '../typeUtils/types';
+import { totalCalendarDatesNum, millisecondsInAnHour, millisecondsInAMinute } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
 import '../css/DayPanel.css';
 
@@ -10,6 +10,7 @@ interface Props {
     calendarMonth: number,
     eventsOnCalendar: Event[],
     selection: Selection,
+    eventFormData: EventFormData,
     editEventMode: boolean,
     createEventMode: boolean,
     timeSelectMode: TimeSelectMode,
@@ -19,13 +20,9 @@ interface Props {
 
 const DayPanel = (props: Props) => {
 
-    const dayPanelRef = useRef<HTMLDivElement>(null);
+    const [hoursPerBlock] = useState(24);
 
-    const getCalendarDateIndex = (date: Date): number => {
-        return props.calendarDates.findIndex(calendarDate => 
-            date.toDateString() === calendarDate.toDateString()
-        );
-    };
+    const dayPanelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         scrollToDate(props.currentDate);
@@ -42,14 +39,21 @@ const DayPanel = (props: Props) => {
         };
     }, [props.selection]);
 
+
+    const getCalendarDateIndex = (date: Date): number => {
+        return props.calendarDates.findIndex(calendarDate => 
+            date.toDateString() === calendarDate.toDateString()
+        );
+    };
+
     const scrollToDate = (date: Date): void =>  {
         const dateIndex = getCalendarDateIndex(date);
         if (!dayPanelRef.current) return;
         /* 
-            In the old version, the first children selector is set to 2 instead of 0 
+            In the old version, the first children selector is set to 2  
             because the events and form containers are placed before.
         */
-        dayPanelRef.current.children[0].children[dateIndex].scrollIntoView(
+        dayPanelRef.current.children[1].children[dateIndex].scrollIntoView(
             { behavior: 'smooth', block: 'start' }
         );
     };
@@ -68,18 +72,14 @@ const DayPanel = (props: Props) => {
         */
     };
 
-    const createIdString = (date: Date, hourValue: number): string => {
-        return `${date.valueOf()} ${hourValue}`;
-    };
-
     // assumes that the id is a string consisting in a date in milliseconds, a space, and an hour number.
     const delegateHourClick = (e: MouseEvent<HTMLElement>): void => {
         if ((!(e.target instanceof HTMLElement)) 
-        || (!(e.target.classList.contains('DayPanelHour')))) return;
+        || (!(e.target.classList.contains('day-panel-hour')))) return;
         const idValues: string[] = e.target.id.split(' ');
-        const hourValue: number = Number(idValues[idValues.length - 1]);
-        const dateValue: number = Number(idValues[0]);
-        const newDate: Date = new Date(dateValue + (hourValue * millisecondsInAnHour));
+        const hourMilliseconds: number = Number(idValues[idValues.length - 1]) * millisecondsInAnHour;
+        const dateMilliseconds: number = Number(idValues[0]);
+        const newDate: Date = new Date(dateMilliseconds + hourMilliseconds);
         if ((props.editEventMode || props.createEventMode)
         && (props.timeSelectMode.start || props.timeSelectMode.end)) {
             props.updateEventFormTimes(newDate);
@@ -88,9 +88,52 @@ const DayPanel = (props: Props) => {
         };
     };
 
+    const updateFormMinutes = (date: Date, minutes: number): void => {
+        const dateMilliseconds: number = date.valueOf();
+        const minuteMilliseconds: number = minutes * millisecondsInAMinute;
+        const newDate = new Date(dateMilliseconds + minuteMilliseconds);
+        props.updateEventFormTimes(newDate);
+    };
 
-    /* add form selection marker - make it a function that sets a local state bool,
-     and then define the element inside the container with a conditional based on state */
+    const handleMinuteInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const inputValue: number = Number(e.target.value);
+        if ((inputValue > 59) || (inputValue < 0)) return;
+        if (props.timeSelectMode.start && props.eventFormData.start) {
+            updateFormMinutes(props.eventFormData.start, inputValue);
+        };
+        if (props.timeSelectMode.end && props.eventFormData.end) {
+            updateFormMinutes(props.eventFormData.end, inputValue);
+        };
+    };
+
+    const getGridRowCoordinates = (
+            startDate: Date, endDate: Date
+        ): { rowStart: number, rowEnd: number } => {
+        const startDateIndex: number = getCalendarDateIndex(startDate);
+        const endDateIndex: number = getCalendarDateIndex(endDate);
+        const startDateNum: number = (startDateIndex === -1) ? 0 : startDateIndex;
+        const endDateNum: number = (endDateIndex === -1) ? (totalCalendarDatesNum - 1) : endDateIndex;
+        const rowStart: number = (startDateNum * hoursPerBlock) + (startDate.getHours() + 1);
+        const rowEnd: number = (endDateNum * hoursPerBlock) + (endDate.getHours() + 2);
+        return { rowStart, rowEnd };
+    };
+
+
+    const getSelectionMarkerCoordinates = (): { rowStart: number, rowEnd: number } | undefined => {
+        const start: Date | undefined = props.eventFormData.start;
+        const end: Date | undefined = props.eventFormData.end;
+        if (!start && !end) return;
+        const startValue: Date = start ? start : end as Date;
+        const endValue: Date = end ? end : start as Date;
+        return getGridRowCoordinates(startValue, endValue);
+    };
+
+    const selectionMarkerCoordinates = getSelectionMarkerCoordinates();
+
+
+    /* put the minute selection as conditionally rendered on the form selection marker, 
+        position-self either top or bottom depending on whether setting start or end */
+
 
     return (
         <div 
@@ -98,13 +141,23 @@ const DayPanel = (props: Props) => {
             ref={dayPanelRef}
             onClick={delegateHourClick}
         >
+            <div className='selection-marker-container'>
+                {selectionMarkerCoordinates && 
+                <div 
+                    className='selection-marker' 
+                    style={{
+                        gridRow: `${selectionMarkerCoordinates.rowStart} / 
+                        ${selectionMarkerCoordinates.rowEnd}`
+                    }}>
+                </div>}
+            </div>
             <div className='hour-blocks-container'>
                 {props.calendarDates.map(date => 
                     <DayPanelHourBlock 
                         key={date.toDateString()}
                         date={date}
                         calendarMonth={props.calendarMonth}
-                        createIdString={createIdString}
+                        hoursPerBlock={hoursPerBlock}
                     />
                 )}
             </div>

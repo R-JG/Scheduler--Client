@@ -1,6 +1,8 @@
 :root {
     --calendar-height-ammount: 6;
     --calendar-width-ammount: 7;
+    --calendar-total-ammount: 42;
+    --hour-block-ammount: 24;
     --foreground-color: #272d2d;
     --background-color: #FEFCFB;
     --accent-color: cadetblue;
