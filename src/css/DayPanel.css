@@ -30,4 +30,24 @@
 .selection-marker {
     grid-column: 1 / 2;
     background-color: rgba(128, 128, 128, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.minute-selection-box {
+    font-size: 0.75em;
+    width: 75%;
+    margin-inline: 1em;
+    margin-top: 2.7em;
+    margin-bottom: 0.7em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: all;
+}
+
+.minute-input {
+    height: 90%;
+    width: 52%;
 }

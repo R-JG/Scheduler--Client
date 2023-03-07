@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { Event, Selection, EventFormData, TimeSelectMode } from '../typeUtils/types';
-import { totalCalendarDatesNum, millisecondsInAnHour, millisecondsInAMinute } from '../constants';
+import { totalCalendarDatesNum, millisecondsInAnHour } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
 import '../css/DayPanel.css';
 
@@ -89,9 +89,8 @@ const DayPanel = (props: Props) => {
     };
 
     const updateFormMinutes = (date: Date, minutes: number): void => {
-        const dateMilliseconds: number = date.valueOf();
-        const minuteMilliseconds: number = minutes * millisecondsInAMinute;
-        const newDate = new Date(dateMilliseconds + minuteMilliseconds);
+        const newDate: Date = new Date(date);
+        newDate.setMinutes(minutes)
         props.updateEventFormTimes(newDate);
     };
 
@@ -104,6 +103,16 @@ const DayPanel = (props: Props) => {
         if (props.timeSelectMode.end && props.eventFormData.end) {
             updateFormMinutes(props.eventFormData.end, inputValue);
         };
+    };
+
+    const getMinuteInputValue = (): number => {
+        if (props.timeSelectMode.start && props.eventFormData.start) {
+            return props.eventFormData.start.getMinutes();
+        };
+        if (props.timeSelectMode.end && props.eventFormData.end) {
+            return props.eventFormData.end.getMinutes();
+        };
+        return 0;
     };
 
     const getGridRowCoordinates = (
@@ -131,10 +140,6 @@ const DayPanel = (props: Props) => {
     const selectionMarkerCoordinates = getSelectionMarkerCoordinates();
 
 
-    /* put the minute selection as conditionally rendered on the form selection marker, 
-        position-self either top or bottom depending on whether setting start or end */
-
-
     return (
         <div 
             className='DayPanel'
@@ -142,13 +147,26 @@ const DayPanel = (props: Props) => {
             onClick={delegateHourClick}
         >
             <div className='selection-marker-container'>
-                {selectionMarkerCoordinates && 
-                <div 
+                {selectionMarkerCoordinates 
+                && <div 
                     className='selection-marker' 
                     style={{
                         gridRow: `${selectionMarkerCoordinates.rowStart} / 
-                        ${selectionMarkerCoordinates.rowEnd}`
-                    }}>
+                            ${selectionMarkerCoordinates.rowEnd}`,
+                        justifyContent: props.timeSelectMode.end ? 'flex-end' : 'flex-start'
+                }}>
+                    {((props.timeSelectMode.start && props.eventFormData.start) 
+                    || (props.timeSelectMode.end && props.eventFormData.end)) 
+                    && <div className='minute-selection-box'>
+                        <input 
+                            className='minute-input'
+                            type='number' 
+                            min='0' 
+                            max='59'
+                            value={getMinuteInputValue()}
+                            onChange={handleMinuteInputChange}/>
+                        <span>min</span>
+                    </div>}
                 </div>}
             </div>
             <div className='hour-blocks-container'>
