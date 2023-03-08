@@ -1,22 +1,8 @@
-import { Event, EventFormData, Selection } from '../typeUtils/types';
+import { EventFormData, Selection, CalendarEvent, EventStyle } from '../typeUtils/types';
 import '../css/CalendarEventElement.css';
 
-interface EventObject {
-    event: Event,
-    columnStart: number,
-    columnEnd: number,
-    rowStart: number,
-    isFirstRow: boolean
-};
-
-interface EventStyle {
-    gridColumn: string,
-    gridRow: string,
-    backgroundColor: string
-};
-
 interface Props {
-    eventObject: EventObject,
+    eventObject: CalendarEvent,
     style: EventStyle,
     selection: Selection,
     eventFormData: EventFormData,

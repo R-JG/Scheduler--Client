@@ -37,3 +37,33 @@ export type TimeSelectMode =
     { start: false, end: false } 
     | { start: true, end: false } 
     | { start: false, end: true };
+
+
+
+
+export interface DateGridItem {
+    date: Date,
+    columnStart: number,
+    columnEnd: number,
+    rowStart: number,
+    rowEnd: number
+};
+
+export interface EventGridItem {
+    event: Event,
+    columnStart: number,
+    columnEnd: number,
+    rowStart: number,
+    rowEnd: number,
+    isFirstRow: boolean
+};
+
+export type CalendarEvent = Omit<EventGridItem, 'rowEnd'>;
+
+export type DayPanelEvent = Omit<EventGridItem, 'isFirstRow'>;
+
+export interface EventStyle {
+    gridColumn: string,
+    gridRow: string,
+    backgroundColor: string
+};

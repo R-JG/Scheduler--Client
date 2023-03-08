@@ -1,23 +1,7 @@
-import { Event, Selection, EventFormData } from '../typeUtils/types';
+import { Event, Selection, EventFormData, DateGridItem, CalendarEvent } from '../typeUtils/types';
 import { calendarHeightNum, calendarWidthNum } from '../constants';
 import CalendarEventsRow from './CalendarEventsRow';
 import '../css/CalendarEventsContainer.css';
-
-interface DateGridItem {
-    date: Date,
-    columnStart: number,
-    columnEnd: number,
-    rowStart: number,
-    rowEnd: number
-};
-
-interface EventObject {
-    event: Event,
-    columnStart: number,
-    columnEnd: number,
-    rowStart: number,
-    isFirstRow: boolean
-};
 
 interface Props {
     calendarDates: Date[], 
@@ -51,7 +35,7 @@ const CalendarEventsContainer = (props: Props) => {
 
     const createEventObject = (
             event: Event, dateCoordinates: DateGridItem, isFirstRow: boolean
-        ): EventObject => {
+        ): CalendarEvent => {
         return {
             event,
             columnStart: dateCoordinates.columnStart,
@@ -61,15 +45,15 @@ const CalendarEventsContainer = (props: Props) => {
         };
     };
 
-    const eventObjectsPerEvent: EventObject[] = props.eventsOnCalendar.map(event => {
+    const eventObjectsPerEvent: CalendarEvent[] = props.eventsOnCalendar.map(event => {
         const eventDateCoordinates: DateGridItem[] = getDateCoordinatesForEvent(event);
-        const initialValue: EventObject[] = [];
-        const eventObjects: EventObject[] = eventDateCoordinates.reduce(
+        const initialValue: CalendarEvent[] = [];
+        const eventObjects: CalendarEvent[] = eventDateCoordinates.reduce(
             (eventObjectsArray, dateCoordinates) => {
-                const latestElIndex = eventObjectsArray.length - 1;
+                const latestElIndex: number = eventObjectsArray.length - 1;
                 if ((eventObjectsArray.length > 0) 
                 && !(dateCoordinates.rowStart > eventObjectsArray[latestElIndex].rowStart)) {
-                    const updatedRowObj = {
+                    const updatedRowObj: CalendarEvent = {
                         ...eventObjectsArray[latestElIndex],
                         columnEnd: dateCoordinates.columnEnd
                     };
@@ -85,13 +69,13 @@ const CalendarEventsContainer = (props: Props) => {
         return eventObjects;
     }).flat();
 
-    const calendarEventRows: EventObject[][] = Array.from(
+    const calendarEventRows: CalendarEvent[][] = Array.from(
         { length: calendarHeightNum }, () => []
     ).map((_calendarRow, index) => {
-        const eventsInCalendarRow: EventObject[] = eventObjectsPerEvent.filter(eventObj => 
+        const eventsInCalendarRow: CalendarEvent[] = eventObjectsPerEvent.filter(eventObj => 
             eventObj.rowStart === (index + 1)
         );
-        const eventObjectsByLength: EventObject[] = eventsInCalendarRow.sort((a, b) => {
+        const eventObjectsByLength: CalendarEvent[] = eventsInCalendarRow.sort((a, b) => {
             const aLength: number = a.columnEnd - a.columnStart;
             const bLength: number = b.columnEnd - b.columnStart;
             return (bLength > aLength) ? 1 : -1;

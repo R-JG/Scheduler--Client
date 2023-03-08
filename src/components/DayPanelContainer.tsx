@@ -1,6 +1,11 @@
-import { useState, useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { Event, Selection, EventFormData, TimeSelectMode } from '../typeUtils/types';
-import { totalCalendarDatesNum, millisecondsInAnHour } from '../constants';
+import { useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
+import { Event, Selection, EventFormData, TimeSelectMode, DayPanelEvent } from '../typeUtils/types';
+import { 
+    totalCalendarDatesNum, 
+    hoursPerHourBlock, 
+    dayPanelEventColumnWidth, 
+    millisecondsInAnHour 
+} from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
 import '../css/DayPanelContainer.css';
 
@@ -19,8 +24,6 @@ interface Props {
 };
 
 const DayPanelContainer = (props: Props) => {
-
-    const [hoursPerBlock] = useState(24);
 
     const dayPanelRef = useRef<HTMLDivElement>(null);
 
@@ -122,8 +125,8 @@ const DayPanelContainer = (props: Props) => {
         const endDateIndex: number = getCalendarDateIndex(endDate);
         const startDateNum: number = (startDateIndex === -1) ? 0 : startDateIndex;
         const endDateNum: number = (endDateIndex === -1) ? (totalCalendarDatesNum - 1) : endDateIndex;
-        const rowStart: number = (startDateNum * hoursPerBlock) + (startDate.getHours() + 1);
-        const rowEnd: number = (endDateNum * hoursPerBlock) + (endDate.getHours() + 2);
+        const rowStart: number = (startDateNum * hoursPerHourBlock) + (startDate.getHours() + 1);
+        const rowEnd: number = (endDateNum * hoursPerHourBlock) + (endDate.getHours() + 2);
         return { rowStart, rowEnd };
     };
 
@@ -139,6 +142,7 @@ const DayPanelContainer = (props: Props) => {
 
     const selectionMarkerCoordinates = getSelectionMarkerCoordinates();
 
+    // const eventObjects: DayPanelEvent[] = props.eventsOnCalendar.map(event => );
 
     return (
         <div 
@@ -175,7 +179,6 @@ const DayPanelContainer = (props: Props) => {
                         key={date.toDateString()}
                         date={date}
                         calendarMonth={props.calendarMonth}
-                        hoursPerBlock={hoursPerBlock}
                     />
                 )}
             </div>

@@ -1,23 +1,9 @@
-import { Event, Selection, EventFormData } from '../typeUtils/types';
+import { Selection, EventFormData, CalendarEvent, EventStyle } from '../typeUtils/types';
 import CalendarEventElement from './CalendarEventElement';
 import '../css/CalendarEventsRow.css';
 
-interface EventObject {
-    event: Event,
-    columnStart: number,
-    columnEnd: number,
-    rowStart: number,
-    isFirstRow: boolean
-};
-
-interface EventStyle {
-    gridColumn: string,
-    gridRow: string,
-    backgroundColor: string
-};
-
 interface Props {
-    eventRowObjects: EventObject[],
+    eventRowObjects: CalendarEvent[],
     selection: Selection,
     eventFormData: EventFormData,
     editEventMode: boolean,
@@ -27,7 +13,7 @@ interface Props {
 const CalendarEventsRow = (props: Props) => {
 
     const getGridRowNumber = (
-            eventObj: EventObject, eventObjIndex: number
+            eventObj: CalendarEvent, eventObjIndex: number
         ): number => props.eventRowObjects.reduce(
         (overlapCount, reduceEventObj, reduceIndex) => 
             ((reduceIndex < eventObjIndex) 
@@ -37,7 +23,7 @@ const CalendarEventsRow = (props: Props) => {
     , 1);
 
     const createEventStyleObject = (
-            eventRowObject: EventObject, gridRowBase: number
+            eventRowObject: CalendarEvent, gridRowBase: number
         ): EventStyle => ({
         gridColumn: `${eventRowObject.columnStart} / ${eventRowObject.columnEnd}`,
         gridRow: `${gridRowBase} / ${gridRowBase + 1}`,

@@ -11,3 +11,9 @@ export const millisecondsInADay = 86400000;
 export const millisecondsInAnHour = 3600000;
 
 export const millisecondsInAMinute = 60000;
+
+
+
+export const hoursPerHourBlock = 24;
+
+export const dayPanelEventColumnWidth = 9;

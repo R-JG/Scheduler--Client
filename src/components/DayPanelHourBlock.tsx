@@ -1,10 +1,10 @@
+import { hoursPerHourBlock } from '../constants';
 import { createHourString } from '../helpers';
 import '../css/DayPanelHourBlock.css';
 
 interface Props {
     date: Date,
     calendarMonth: number,
-    hoursPerBlock: number
 };
 
 const DayPanelHourBlock = (props: Props) => {
@@ -24,7 +24,7 @@ const DayPanelHourBlock = (props: Props) => {
             <div className='date-separator'>
                 {props.date.toDateString()}
             </div>
-            {Array.from({ length: props.hoursPerBlock }, (_, index) => 
+            {Array.from({ length: hoursPerHourBlock }, (_, index) => 
                 <div 
                     key={index}
                     className='day-panel-hour' 
