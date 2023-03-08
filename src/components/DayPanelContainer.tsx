@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { Event, Selection, EventFormData, TimeSelectMode } from '../typeUtils/types';
 import { totalCalendarDatesNum, millisecondsInAnHour } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
-import '../css/DayPanel.css';
+import '../css/DayPanelContainer.css';
 
 interface Props {
     currentDate: Date,
@@ -18,7 +18,7 @@ interface Props {
     updateEventFormTimes: (date: Date) => void
 };
 
-const DayPanel = (props: Props) => {
+const DayPanelContainer = (props: Props) => {
 
     const [hoursPerBlock] = useState(24);
 
@@ -142,7 +142,7 @@ const DayPanel = (props: Props) => {
 
     return (
         <div 
-            className='DayPanel'
+            className='DayPanelContainer'
             ref={dayPanelRef}
             onClick={delegateHourClick}
         >
@@ -183,4 +183,4 @@ const DayPanel = (props: Props) => {
     );
 };
 
-export default DayPanel;
+export default DayPanelContainer;

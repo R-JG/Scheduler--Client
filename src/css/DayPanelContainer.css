@@ -1,4 +1,4 @@
-.DayPanel {
+.DayPanelContainer {
     box-sizing: border-box;
     max-height: var(--main-panel-height);
     width: var(--main-panel-width);

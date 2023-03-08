@@ -11,7 +11,7 @@ import eventsService from '../services/eventsService';
 import validation from '../typeUtils/validation';
 import CalendarContainer from './CalendarContainer';
 import EventCreationPanel from './EventCreationPanel';
-import DayPanel from './DayPanel';
+import DayPanelContainer from './DayPanelContainer';
 import '../css/App.css';
 
 
@@ -124,9 +124,6 @@ const App = () => {
         });
     };
 
-    console.log(selection);
-    
-
     return (
         <main className='App'>
             <CalendarContainer 
@@ -155,7 +152,7 @@ const App = () => {
                 addNewEvent={addNewEvent}
                 clearEventFormData={clearEventFormData}
             />
-            <DayPanel 
+            <DayPanelContainer 
                 currentDate={currentDate}
                 calendarDates={calendarDates}
                 calendarMonth={calendarMonth}
