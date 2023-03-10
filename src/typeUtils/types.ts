@@ -67,3 +67,13 @@ export interface EventStyle {
     gridRow: string,
     backgroundColor: string
 };
+
+export interface RowCoordinates {
+    rowStart: number,
+    rowEnd: number
+};
+
+export interface ColumnCoordinates {
+    columnStart: number,
+    columnEnd: number
+};

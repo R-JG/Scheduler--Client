@@ -16,4 +16,4 @@ export const millisecondsInAMinute = 60000;
 
 export const hoursPerHourBlock = 24;
 
-export const dayPanelEventColumnWidth = 9;
+export const expandedEventColumnWidth = 9;

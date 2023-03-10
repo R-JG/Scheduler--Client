@@ -1,9 +1,17 @@
 import { useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { Event, Selection, EventFormData, TimeSelectMode, DayPanelEvent } from '../typeUtils/types';
+import { 
+    Event, 
+    Selection, 
+    EventFormData, 
+    TimeSelectMode, 
+    RowCoordinates, 
+    ColumnCoordinates, 
+    DayPanelEvent 
+} from '../typeUtils/types';
 import { 
     totalCalendarDatesNum, 
     hoursPerHourBlock, 
-    dayPanelEventColumnWidth, 
+    expandedEventColumnWidth, 
     millisecondsInAnHour 
 } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
@@ -118,9 +126,7 @@ const DayPanelContainer = (props: Props) => {
         return 0;
     };
 
-    const getGridRowCoordinates = (
-            startDate: Date, endDate: Date
-        ): { rowStart: number, rowEnd: number } => {
+    const getGridRowCoordinates = (startDate: Date, endDate: Date): RowCoordinates => {
         const startDateIndex: number = getCalendarDateIndex(startDate);
         const endDateIndex: number = getCalendarDateIndex(endDate);
         const startDateNum: number = (startDateIndex === -1) ? 0 : startDateIndex;
@@ -131,7 +137,7 @@ const DayPanelContainer = (props: Props) => {
     };
 
 
-    const getSelectionMarkerCoordinates = (): { rowStart: number, rowEnd: number } | undefined => {
+    const getSelectionMarkerCoordinates = (): RowCoordinates | undefined => {
         const start: Date | undefined = props.eventFormData.start;
         const end: Date | undefined = props.eventFormData.end;
         if (!start && !end) return;
@@ -140,9 +146,52 @@ const DayPanelContainer = (props: Props) => {
         return getGridRowCoordinates(startValue, endValue);
     };
 
-    const selectionMarkerCoordinates = getSelectionMarkerCoordinates();
+    const selectionMarkerCoordinates: RowCoordinates | undefined = getSelectionMarkerCoordinates();
+    // put the selection marker in its own component?
 
-    // const eventObjects: DayPanelEvent[] = props.eventsOnCalendar.map(event => );
+    // have a separate day panel events container component?
+
+
+    const getGridColumnCoordinates = (
+            prevEventObjects: DayPanelEvent[], 
+            newRowCoordinates: RowCoordinates, 
+            isSelected: boolean
+        ): ColumnCoordinates => {
+            const columnWidth: number = (isSelected) ? expandedEventColumnWidth : 1;
+            const columnStart: number = prevEventObjects.reduce((columnCount, prevEventObj) => {
+                const possibleStart: number = columnCount;
+                const possibleEnd: number = possibleStart + columnWidth;
+                return (((newRowCoordinates.rowEnd > prevEventObj.rowStart) 
+                && (newRowCoordinates.rowStart < prevEventObj.rowEnd))
+                && ((possibleEnd > prevEventObj.columnStart) 
+                && (possibleStart < prevEventObj.columnEnd))) 
+                    ? columnCount + 1 : columnCount
+            }, 1);
+            const columnEnd: number = columnStart + columnWidth;
+            return { columnStart, columnEnd };
+    };
+
+    const initialValue: DayPanelEvent[] = [];
+    const eventObjects: DayPanelEvent[] = props.eventsOnCalendar.reduce(
+        (eventObjects, event) => {
+            const eventRowCoordinates: RowCoordinates = getGridRowCoordinates(
+                event.start, event.end
+            );
+            const isSelected: boolean = (
+                ((props.selection.type === 'event') 
+                && (props.selection.value.eventId === event.eventId)
+                || (props.editEventMode && (props.eventFormData.eventId === event.eventId)))
+            );
+            const eventColumnCoordinates: ColumnCoordinates = getGridColumnCoordinates(
+                eventObjects, eventRowCoordinates, isSelected
+            );
+            const newEventObject: DayPanelEvent = { 
+                event, 
+                ...eventRowCoordinates, 
+                ...eventColumnCoordinates 
+            };
+            return eventObjects.concat(newEventObject);
+    }, initialValue);
 
     return (
         <div 
