@@ -1,20 +1,9 @@
-import { useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { 
-    Event, 
-    Selection, 
-    EventFormData, 
-    TimeSelectMode, 
-    RowCoordinates, 
-    ColumnCoordinates, 
-    DayPanelEvent 
-} from '../typeUtils/types';
-import { 
-    totalCalendarDatesNum, 
-    hoursPerHourBlock, 
-    expandedEventColumnWidth, 
-    millisecondsInAnHour 
-} from '../constants';
+import { useRef, useEffect, MouseEvent } from 'react';
+import { Event, Selection, EventFormData, TimeSelectMode, RowCoordinates} from '../typeUtils/types';
+import { totalCalendarDatesNum, hoursPerHourBlock, millisecondsInAnHour } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
+import DayPanelEventsContainer from './DayPanelEventsContainer';
+import DayPanelSelectionMarker from './DayPanelSelectionMarker';
 import '../css/DayPanelContainer.css';
 
 interface Props {
@@ -64,7 +53,7 @@ const DayPanelContainer = (props: Props) => {
             In the old version, the first children selector is set to 2  
             because the events and form containers are placed before.
         */
-        dayPanelRef.current.children[1].children[dateIndex].scrollIntoView(
+        dayPanelRef.current.children[2].children[dateIndex].scrollIntoView(
             { behavior: 'smooth', block: 'start' }
         );
     };
@@ -99,33 +88,6 @@ const DayPanelContainer = (props: Props) => {
         };
     };
 
-    const updateFormMinutes = (date: Date, minutes: number): void => {
-        const newDate: Date = new Date(date);
-        newDate.setMinutes(minutes)
-        props.updateEventFormTimes(newDate);
-    };
-
-    const handleMinuteInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const inputValue: number = Number(e.target.value);
-        if ((inputValue > 59) || (inputValue < 0)) return;
-        if (props.timeSelectMode.start && props.eventFormData.start) {
-            updateFormMinutes(props.eventFormData.start, inputValue);
-        };
-        if (props.timeSelectMode.end && props.eventFormData.end) {
-            updateFormMinutes(props.eventFormData.end, inputValue);
-        };
-    };
-
-    const getMinuteInputValue = (): number => {
-        if (props.timeSelectMode.start && props.eventFormData.start) {
-            return props.eventFormData.start.getMinutes();
-        };
-        if (props.timeSelectMode.end && props.eventFormData.end) {
-            return props.eventFormData.end.getMinutes();
-        };
-        return 0;
-    };
-
     const getGridRowCoordinates = (startDate: Date, endDate: Date): RowCoordinates => {
         const startDateIndex: number = getCalendarDateIndex(startDate);
         const endDateIndex: number = getCalendarDateIndex(endDate);
@@ -137,91 +99,25 @@ const DayPanelContainer = (props: Props) => {
     };
 
 
-    const getSelectionMarkerCoordinates = (): RowCoordinates | undefined => {
-        const start: Date | undefined = props.eventFormData.start;
-        const end: Date | undefined = props.eventFormData.end;
-        if (!start && !end) return;
-        const startValue: Date = start ? start : end as Date;
-        const endValue: Date = end ? end : start as Date;
-        return getGridRowCoordinates(startValue, endValue);
-    };
-
-    const selectionMarkerCoordinates: RowCoordinates | undefined = getSelectionMarkerCoordinates();
-    // put the selection marker in its own component?
-
-    // have a separate day panel events container component?
-
-
-    const getGridColumnCoordinates = (
-            prevEventObjects: DayPanelEvent[], 
-            newRowCoordinates: RowCoordinates, 
-            isSelected: boolean
-        ): ColumnCoordinates => {
-            const columnWidth: number = (isSelected) ? expandedEventColumnWidth : 1;
-            const columnStart: number = prevEventObjects.reduce((columnCount, prevEventObj) => {
-                const possibleStart: number = columnCount;
-                const possibleEnd: number = possibleStart + columnWidth;
-                return (((newRowCoordinates.rowEnd > prevEventObj.rowStart) 
-                && (newRowCoordinates.rowStart < prevEventObj.rowEnd))
-                && ((possibleEnd > prevEventObj.columnStart) 
-                && (possibleStart < prevEventObj.columnEnd))) 
-                    ? columnCount + 1 : columnCount
-            }, 1);
-            const columnEnd: number = columnStart + columnWidth;
-            return { columnStart, columnEnd };
-    };
-
-    const initialValue: DayPanelEvent[] = [];
-    const eventObjects: DayPanelEvent[] = props.eventsOnCalendar.reduce(
-        (eventObjects, event) => {
-            const eventRowCoordinates: RowCoordinates = getGridRowCoordinates(
-                event.start, event.end
-            );
-            const isSelected: boolean = (
-                ((props.selection.type === 'event') 
-                && (props.selection.value.eventId === event.eventId)
-                || (props.editEventMode && (props.eventFormData.eventId === event.eventId)))
-            );
-            const eventColumnCoordinates: ColumnCoordinates = getGridColumnCoordinates(
-                eventObjects, eventRowCoordinates, isSelected
-            );
-            const newEventObject: DayPanelEvent = { 
-                event, 
-                ...eventRowCoordinates, 
-                ...eventColumnCoordinates 
-            };
-            return eventObjects.concat(newEventObject);
-    }, initialValue);
-
     return (
         <div 
             className='DayPanelContainer'
             ref={dayPanelRef}
             onClick={delegateHourClick}
         >
-            <div className='selection-marker-container'>
-                {selectionMarkerCoordinates 
-                && <div 
-                    className='selection-marker' 
-                    style={{
-                        gridRow: `${selectionMarkerCoordinates.rowStart} / 
-                            ${selectionMarkerCoordinates.rowEnd}`,
-                        justifyContent: props.timeSelectMode.end ? 'flex-end' : 'flex-start'
-                }}>
-                    {((props.timeSelectMode.start && props.eventFormData.start) 
-                    || (props.timeSelectMode.end && props.eventFormData.end)) 
-                    && <div className='minute-selection-box'>
-                        <input 
-                            className='minute-input'
-                            type='number' 
-                            min='0' 
-                            max='59'
-                            value={getMinuteInputValue()}
-                            onChange={handleMinuteInputChange}/>
-                        <span>min</span>
-                    </div>}
-                </div>}
-            </div>
+            <DayPanelEventsContainer 
+                eventsOnCalendar={props.eventsOnCalendar}
+                selection={props.selection}
+                eventFormData={props.eventFormData}
+                editEventMode={props.editEventMode}
+                getGridRowCoordinates={getGridRowCoordinates}
+            />
+            <DayPanelSelectionMarker 
+                eventFormData={props.eventFormData}
+                timeSelectMode={props.timeSelectMode}
+                updateEventFormTimes={props.updateEventFormTimes}
+                getGridRowCoordinates={getGridRowCoordinates}
+            />
             <div className='hour-blocks-container'>
                 {props.calendarDates.map(date => 
                     <DayPanelHourBlock 
