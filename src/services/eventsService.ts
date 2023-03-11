@@ -28,4 +28,31 @@ const addEvent = async (newDbEvent: NewDbFormattedEvent): Promise<DbFormattedEve
     };
 };
 
-export default { getAllEvents, addEvent };
+const editEvent = async (eventUpdate: DbFormattedEvent): Promise<DbFormattedEvent | undefined> => {
+    try {
+        const response = await axios.put(
+            `${baseUrl}/${eventUpdate.eventId}`, 
+            eventUpdate, 
+            { validateStatus: status => status < 400 }
+        );
+        const updatedDbEvent = validation.parseDbFormattedEvent(response.data);
+        return updatedDbEvent;
+    } catch (error: any) {
+        console.log(error.message);
+    };
+};
+
+const deleteEvent = async (eventId: string): Promise<DbFormattedEvent | undefined> => {
+    try {
+        const response = await axios.delete(
+            `${baseUrl}/${eventId}`, 
+            { validateStatus: status => status < 400 }
+        );
+        const deletedDbEvent = response.data;
+        return deletedDbEvent;
+    } catch (error: any) {
+        console.log(error.message);
+    };
+};
+
+export default { getAllEvents, addEvent, editEvent, deleteEvent };

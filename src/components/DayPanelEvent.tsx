@@ -14,7 +14,9 @@ interface Props {
     setTimeSelectMode: (params: TimeSelectMode) => void,
     updateEventFormProperty: (name: string, value: string | Date) => void,
     stageEventEdit: (eventToEdit: Event) => void
+    editEvent: () => void,
     endEventEdit: () => void
+    deleteEvent: (eventId: string) => void
 };
 
 const DayPanelEvent = (props: Props) => {
@@ -43,7 +45,7 @@ const DayPanelEvent = (props: Props) => {
         || (!props.eventFormData.end)
         || (props.eventFormData.title === '')
         ) return;
-        // editEvent(props.event);
+        props.editEvent();
     };
 
     const handleFormChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -115,7 +117,7 @@ const DayPanelEvent = (props: Props) => {
                     <button 
                         type='button'
                         className='button--delete-event'
-                        onClick={() => /* deleteEvent(props.event) */ console.log('click')}
+                        onClick={() => props.deleteEvent(props.event.eventId)}
                     >
                         Delete Event
                     </button>

@@ -16,7 +16,9 @@ interface Props {
     setTimeSelectMode: (params: TimeSelectMode) => void,
     updateEventFormProperty: (name: string, value: string | Date) => void,
     stageEventEdit: (eventToEdit: Event) => void,
+    editEvent: () => void,
     endEventEdit: () => void,
+    deleteEvent: (eventId: string) => void,
     getGridRowCoordinates: (startDate: Date, endDate: Date) => RowCoordinates
 };
 
@@ -84,7 +86,9 @@ const DayPanelEventsContainer = (props: Props) => {
                     setTimeSelectMode={props.setTimeSelectMode}
                     updateEventFormProperty={props.updateEventFormProperty}
                     stageEventEdit={props.stageEventEdit}
+                    editEvent={props.editEvent}
                     endEventEdit={props.endEventEdit}
+                    deleteEvent={props.deleteEvent}
                 />
             )}
         </div>

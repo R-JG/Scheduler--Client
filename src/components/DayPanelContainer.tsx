@@ -21,7 +21,9 @@ interface Props {
     updateEventFormProperty: (name: string, value: string | Date) => void,
     updateEventFormTimes: (date: Date) => void,
     stageEventEdit: (eventToEdit: Event) => void,
-    endEventEdit: () => void
+    editEvent: () => void,
+    endEventEdit: () => void,
+    deleteEvent: (eventId: string) => void
 };
 
 const DayPanelContainer = (props: Props) => {
@@ -50,25 +52,27 @@ const DayPanelContainer = (props: Props) => {
         );
     };
 
+    const hourBlocksContainerIndex: number = 2;
+
     const scrollToDate = (date: Date): void =>  {
         const dateIndex = getCalendarDateIndex(date);
         if (!dayPanelRef.current) return;
-        /* 
-            In the old version, the first children selector is set to 2  
-            because the events and form containers are placed before.
-        */
-        dayPanelRef.current.children[2].children[dateIndex].scrollIntoView(
-            { behavior: 'smooth', block: 'start' }
+        dayPanelRef.current.children[hourBlocksContainerIndex].children[dateIndex]
+            .scrollIntoView(
+                { behavior: 'smooth', block: 'start' }
         );
     };
+
+    const eventsContainerIndex: number = 0;
 
     const scrollToEvent = (event: Event): void => {
         const eventIndex = props.eventsOnCalendar.findIndex(eventOnCalendar => (
             event.eventId === eventOnCalendar.eventId
         ));
         if (!dayPanelRef.current) return;
-        dayPanelRef.current.children[0].children[eventIndex].scrollIntoView(
-            { behavior: 'smooth', block: 'start' }
+        dayPanelRef.current.children[eventsContainerIndex].children[eventIndex]
+            .scrollIntoView(
+                { behavior: 'smooth', block: 'start' }
         );
     };
 
@@ -116,7 +120,9 @@ const DayPanelContainer = (props: Props) => {
                 setTimeSelectMode={props.setTimeSelectMode}
                 updateEventFormProperty={props.updateEventFormProperty}
                 stageEventEdit={props.stageEventEdit}
+                editEvent={props.editEvent}
                 endEventEdit={props.endEventEdit}
+                deleteEvent={props.deleteEvent}
                 getGridRowCoordinates={getGridRowCoordinates}
             />
             <DayPanelSelectionMarker 

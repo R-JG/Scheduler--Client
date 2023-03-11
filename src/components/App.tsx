@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Event, EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
-import { 
-    generateCalendarDates, getRandomHSLColor, convertDbFormatToEvent, convertNewEventToDbFormat 
-} from '../helpers';
+import { eventToDbFormat, newEventToDbFormat, dbFormatToEvent } from '../typeUtils/conversion';
+import { generateCalendarDates, getRandomHSLColor } from '../helpers';
 import { middleCalendarDateNum,millisecondsInADay } from '../constants';
 import eventsService from '../services/eventsService';
 import validation from '../typeUtils/validation';
@@ -45,7 +44,7 @@ const App = () => {
         response.then(dbEventsArray => {
             if (dbEventsArray) {
                 const eventsArray = dbEventsArray.map(dbEvent => 
-                    convertDbFormatToEvent(dbEvent)
+                    dbFormatToEvent(dbEvent)
                 );
                 setEvents(eventsArray);
             };
@@ -111,11 +110,11 @@ const App = () => {
             ...eventFormData,
             color: getRandomHSLColor()
         });
-        const dbEvent = convertNewEventToDbFormat(newEvent);
-        const response = eventsService.addEvent(dbEvent);
-        response.then(addedDbEvent => {
+        const dbEvent = newEventToDbFormat(newEvent);
+        const responseData = eventsService.addEvent(dbEvent);
+        responseData.then(addedDbEvent => {
             if (addedDbEvent) {
-                const addedEvent = convertDbFormatToEvent(addedDbEvent);
+                const addedEvent = dbFormatToEvent(addedDbEvent);
                 setEvents(events.concat(addedEvent));
             } else return console.log('added event is undefined');
         });
@@ -127,7 +126,20 @@ const App = () => {
         setEditEventMode(true);
     };
 
-    const editEvent = () => {};
+    const editEvent = () => {
+        if (!eventFormData.eventId) return;
+        const editedEvent = validation.parseEvent({ ...eventFormData });
+        const dbEvent = eventToDbFormat(editedEvent);
+        const responseData = eventsService.editEvent(dbEvent);
+        responseData.then(updatedDbEvent => {
+            if (updatedDbEvent) {
+                const updatedEvent = dbFormatToEvent(updatedDbEvent);
+                setEvents(events.map(event => 
+                    (event.eventId === updatedEvent.eventId) ? updatedEvent : event
+                ));
+            } else return console.log('updated event is undefined');
+        });
+    };
 
     const endEventEdit = (): void => {
         clearEventFormData();
@@ -135,7 +147,16 @@ const App = () => {
         setEditEventMode(false);
     };
 
-    const deleteEvent = () => {};
+    const deleteEvent = (eventId: string): void => {
+        const responseData = eventsService.deleteEvent(eventId);
+        responseData.then(deletedDbEvent => {
+            if (deletedDbEvent) {
+                setEvents(events.filter(
+                    event => (event.eventId !== deletedDbEvent.eventId)
+                ));
+            } else return console.log('deleted event is undefined');
+        });
+    };
 
     return (
         <main className='App'>
@@ -180,7 +201,9 @@ const App = () => {
                 updateEventFormProperty={updateEventFormProperty}
                 updateEventFormTimes={updateEventFormTimes}
                 stageEventEdit={stageEventEdit}
+                editEvent={editEvent}
                 endEventEdit={endEventEdit}
+                deleteEvent={deleteEvent}
             />
         </main>
     );

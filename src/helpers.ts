@@ -1,4 +1,3 @@
-import { Event, NewEvent, DbFormattedEvent, NewDbFormattedEvent } from './typeUtils/types';
 import { totalCalendarDatesNum } from './constants';
 
 
@@ -25,26 +24,4 @@ export const createHourString = (hour: number): string => {
     if (hour === 12) return '12:00 PM';
     if (hour > 12) return `${hour - 12}:00 PM`;
     return `${hour}:00 AM`;
-};
-
-export const convertNewEventToDbFormat = (eventObj: NewEvent): NewDbFormattedEvent => {
-    const dbEvent: any = { 
-        ...eventObj,
-        startMilliseconds: eventObj.start.valueOf(),
-        endMilliseconds: eventObj.end.valueOf(),
-    };
-    delete dbEvent.start;
-    delete dbEvent.end;
-    return dbEvent as NewDbFormattedEvent;
-};
-
-export const convertDbFormatToEvent = (dbEvent: DbFormattedEvent): Event => {
-    const event: any = {
-        ...dbEvent,
-        start: new Date(dbEvent.startMilliseconds),
-        end: new Date(dbEvent.endMilliseconds)
-    };
-    delete event.startMilliseconds;
-    delete event.endMilliseconds;
-    return event as Event;
 };
