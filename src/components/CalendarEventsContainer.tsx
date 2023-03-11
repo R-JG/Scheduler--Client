@@ -1,4 +1,4 @@
-import { Event, Selection, EventFormData, DateGridItem, CalendarEvent } from '../typeUtils/types';
+import { Event, Selection, EventFormData, DateGridItem, CalendarEventObject } from '../typeUtils/types';
 import { calendarHeightNum, calendarWidthNum } from '../constants';
 import CalendarEventsRow from './CalendarEventsRow';
 import '../css/CalendarEventsContainer.css';
@@ -35,7 +35,7 @@ const CalendarEventsContainer = (props: Props) => {
 
     const createEventObject = (
             event: Event, dateCoordinates: DateGridItem, isFirstRow: boolean
-        ): CalendarEvent => {
+        ): CalendarEventObject => {
         return {
             event,
             columnStart: dateCoordinates.columnStart,
@@ -45,15 +45,15 @@ const CalendarEventsContainer = (props: Props) => {
         };
     };
 
-    const eventObjectsPerEvent: CalendarEvent[] = props.eventsOnCalendar.map(event => {
+    const eventObjectsPerEvent: CalendarEventObject[] = props.eventsOnCalendar.map(event => {
         const eventDateCoordinates: DateGridItem[] = getDateCoordinatesForEvent(event);
-        const initialValue: CalendarEvent[] = [];
-        const eventObjects: CalendarEvent[] = eventDateCoordinates.reduce(
+        const initialValue: CalendarEventObject[] = [];
+        const eventObjects: CalendarEventObject[] = eventDateCoordinates.reduce(
             (eventObjectsArray, dateCoordinates) => {
                 const latestElIndex: number = eventObjectsArray.length - 1;
                 if ((eventObjectsArray.length > 0) 
                 && !(dateCoordinates.rowStart > eventObjectsArray[latestElIndex].rowStart)) {
-                    const updatedRowObj: CalendarEvent = {
+                    const updatedRowObj: CalendarEventObject = {
                         ...eventObjectsArray[latestElIndex],
                         columnEnd: dateCoordinates.columnEnd
                     };
@@ -69,13 +69,13 @@ const CalendarEventsContainer = (props: Props) => {
         return eventObjects;
     }).flat();
 
-    const calendarEventRows: CalendarEvent[][] = Array.from(
-        { length: calendarHeightNum }, () => []
-    ).map((_calendarRow, index) => {
-        const eventsInCalendarRow: CalendarEvent[] = eventObjectsPerEvent.filter(eventObj => 
+    const calendarEventRows: CalendarEventObject[][] = Array.from(
+            { length: calendarHeightNum }, () => []
+        ).map((_calendarRow, index) => {
+        const eventsInCalendarRow: CalendarEventObject[] = eventObjectsPerEvent.filter(eventObj => 
             eventObj.rowStart === (index + 1)
         );
-        const eventObjectsByLength: CalendarEvent[] = eventsInCalendarRow.sort((a, b) => {
+        const eventObjectsByLength: CalendarEventObject[] = eventsInCalendarRow.sort((a, b) => {
             const aLength: number = a.columnEnd - a.columnStart;
             const bLength: number = b.columnEnd - b.columnStart;
             return (bLength > aLength) ? 1 : -1;

@@ -17,7 +17,11 @@ interface Props {
     createEventMode: boolean,
     timeSelectMode: TimeSelectMode,
     setSelection: (selection: Selection) => void,
-    updateEventFormTimes: (date: Date) => void
+    setTimeSelectMode: (params: TimeSelectMode) => void,
+    updateEventFormProperty: (name: string, value: string | Date) => void,
+    updateEventFormTimes: (date: Date) => void,
+    stageEventEdit: (eventToEdit: Event) => void,
+    endEventEdit: () => void
 };
 
 const DayPanelContainer = (props: Props) => {
@@ -59,9 +63,6 @@ const DayPanelContainer = (props: Props) => {
     };
 
     const scrollToEvent = (event: Event): void => {
-        /* 
-            ############# Disabled until events are added #############
-
         const eventIndex = props.eventsOnCalendar.findIndex(eventOnCalendar => (
             event.eventId === eventOnCalendar.eventId
         ));
@@ -69,7 +70,6 @@ const DayPanelContainer = (props: Props) => {
         dayPanelRef.current.children[0].children[eventIndex].scrollIntoView(
             { behavior: 'smooth', block: 'start' }
         );
-        */
     };
 
     // assumes that the id is a string consisting in a date in milliseconds, a space, and an hour number.
@@ -110,6 +110,13 @@ const DayPanelContainer = (props: Props) => {
                 selection={props.selection}
                 eventFormData={props.eventFormData}
                 editEventMode={props.editEventMode}
+                createEventMode={props.createEventMode}
+                timeSelectMode={props.timeSelectMode}
+                setSelection={props.setSelection}
+                setTimeSelectMode={props.setTimeSelectMode}
+                updateEventFormProperty={props.updateEventFormProperty}
+                stageEventEdit={props.stageEventEdit}
+                endEventEdit={props.endEventEdit}
                 getGridRowCoordinates={getGridRowCoordinates}
             />
             <DayPanelSelectionMarker 

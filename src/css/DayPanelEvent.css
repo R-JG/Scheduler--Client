@@ -1,0 +1,192 @@
+.DayPanelEvent {
+    width: 100%;
+    border-radius: 0.6em;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.expanded-event {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    padding: 1.5em;
+    border-radius: 0.6em;
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    cursor: auto;
+}
+
+
+/* When the event is selected */
+
+.expanded-event-title {
+    width: 90%;
+    margin: 0;
+    margin-bottom: 0.3em;
+    word-wrap: break-word;
+}
+
+.expanded-event-description {
+    width: 90%;
+    word-wrap: break-word;
+}
+
+.expanded-event-start {
+    margin-block: 1em;
+}
+
+.expanded-event-start p {
+    margin: 0;
+}
+
+.expanded-event-end {
+    margin-bottom: 0.8em;
+}
+
+.expanded-event-end p {
+    margin: 0;
+}
+
+.button--edit-event {
+    background-color: transparent;
+    height: 2.2em;
+    width: 2.2em;
+    font-weight: 700;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    align-self: flex-end;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+/* When the event is being edited */
+
+.event-edit-form {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    justify-items: start;
+    align-items: center;
+    grid-template-columns: repeat(3, 7em);
+    grid-template-rows: repeat(5, min(5em));
+}
+
+.button--confirm-edit {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    cursor: pointer;
+}
+
+.button--delete-event {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    cursor: pointer;
+}
+
+.button--cancel-edit {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+    cursor: pointer;
+}
+
+.event-edit-form--title-label {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.event-edit-form--title {
+    background-color: transparent;
+    width: 12.5em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.1em solid var(--foreground-color);
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+.event-edit-form--description-label {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+}
+
+.event-edit-form--description {
+    background-color: transparent;
+    width: 12.5em;
+    padding: 0.3em;
+    border-radius: 0.7em;
+    border: 0.1em solid var(--foreground-color);
+    max-height: 6em;
+    min-width: 14em;
+    max-width: 14em;
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+}
+
+.event-edit-form--start-label {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+}
+
+.event-edit-form--start-value {
+    width: 12em;
+    margin-block: 0.5em;
+}
+
+.event-edit-form--start {
+    grid-column: 2 / 3;
+    grid-row: 4 / 5;
+}
+
+.event-edit-form--end-label{
+    grid-column: 1 / 2;
+    grid-row: 5 / 6;
+}
+
+.event-edit-form--end-value {
+    width: 12em;
+    margin-block: 0.5em;
+}
+
+.event-edit-form--end {
+    grid-column: 2 / 3;
+    grid-row: 5 / 6;
+}
+
+.button--set-start-time--DayPanel {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.3em;
+    margin-top: 0.5em;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    cursor: pointer;
+}
+
+.button--set-end-time--DayPanel {
+    background-color: transparent;
+    font-weight: 700;
+    padding: 0.3em;
+    margin-top: 0.5em;
+    border-radius: 0.7em;
+    border: 0.18em solid var(--foreground-color);
+    cursor: pointer;
+}

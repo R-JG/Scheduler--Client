@@ -1,8 +1,8 @@
-import { EventFormData, Selection, CalendarEvent, EventStyle } from '../typeUtils/types';
-import '../css/CalendarEventElement.css';
+import { EventFormData, Selection, CalendarEventObject, EventStyle } from '../typeUtils/types';
+import '../css/CalendarEvent.css';
 
 interface Props {
-    eventObject: CalendarEvent,
+    eventObject: CalendarEventObject,
     style: EventStyle,
     selection: Selection,
     eventFormData: EventFormData,
@@ -10,7 +10,7 @@ interface Props {
     setSelection: (selection: Selection) => void
 };
 
-const CalendarEventElement = (props: Props) => {
+const CalendarEvent = (props: Props) => {
 
     const handleEventClick = (): void => {
         if (props.editEventMode 
@@ -27,10 +27,9 @@ const CalendarEventElement = (props: Props) => {
             : '';
     };
     
-
     return (
         <div 
-            className={`CalendarEventElement ${hasSelectedEventClass()}`} 
+            className={`CalendarEvent ${hasSelectedEventClass()}`} 
             style={props.style}
             onClick={handleEventClick}
         >
@@ -42,4 +41,4 @@ const CalendarEventElement = (props: Props) => {
     );
 };
 
-export default CalendarEventElement;
+export default CalendarEvent;

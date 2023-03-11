@@ -1,12 +1,8 @@
 import { 
-    Event, 
-    EventFormData, 
-    Selection, 
-    DayPanelEvent, 
-    RowCoordinates, 
-    ColumnCoordinates 
+    Event, EventFormData, Selection, DayPanelEventObject, RowCoordinates, ColumnCoordinates, TimeSelectMode 
 } from '../typeUtils/types';
 import { expandedEventColumnWidth } from '../constants';
+import DayPanelEvent from './DayPanelEvent';
 import '../css/DayPanelEventsContainer.css';
 
 interface Props {
@@ -14,17 +10,24 @@ interface Props {
     selection: Selection,
     eventFormData: EventFormData,
     editEventMode: boolean,
+    createEventMode: boolean,
+    timeSelectMode: TimeSelectMode,
+    setSelection: (selection: Selection) => void,
+    setTimeSelectMode: (params: TimeSelectMode) => void,
+    updateEventFormProperty: (name: string, value: string | Date) => void,
+    stageEventEdit: (eventToEdit: Event) => void,
+    endEventEdit: () => void,
     getGridRowCoordinates: (startDate: Date, endDate: Date) => RowCoordinates
 };
 
 const DayPanelEventsContainer = (props: Props) => {
 
     const getGridColumnCoordinates = (
-            prevEventObjects: DayPanelEvent[], 
+            prevEventObjects: DayPanelEventObject[], 
             newRowCoordinates: RowCoordinates, 
-            isSelected: boolean
+            isExpanded: boolean
         ): ColumnCoordinates => {
-            const columnWidth: number = (isSelected) ? expandedEventColumnWidth : 1;
+            const columnWidth: number = (isExpanded) ? expandedEventColumnWidth : 1;
             const columnStart: number = prevEventObjects.reduce((columnCount, prevEventObj) => {
                 const possibleStart: number = columnCount;
                 const possibleEnd: number = possibleStart + columnWidth;
@@ -38,21 +41,21 @@ const DayPanelEventsContainer = (props: Props) => {
             return { columnStart, columnEnd };
     };
 
-    const initialValue: DayPanelEvent[] = [];
-    const eventObjects: DayPanelEvent[] = props.eventsOnCalendar.reduce(
+    const initialValue: DayPanelEventObject[] = [];
+    const eventObjects: DayPanelEventObject[] = props.eventsOnCalendar.reduce(
         (eventObjects, event) => {
             const eventRowCoordinates: RowCoordinates = props.getGridRowCoordinates(
                 event.start, event.end
             );
-            const isSelected: boolean = (
+            const isExpanded: boolean = (
                 ((props.selection.type === 'event') 
                 && (props.selection.value.eventId === event.eventId)
                 || (props.editEventMode && (props.eventFormData.eventId === event.eventId)))
             );
             const eventColumnCoordinates: ColumnCoordinates = getGridColumnCoordinates(
-                eventObjects, eventRowCoordinates, isSelected
+                eventObjects, eventRowCoordinates, isExpanded
             );
-            const newEventObject: DayPanelEvent = { 
+            const newEventObject: DayPanelEventObject = { 
                 event, 
                 ...eventRowCoordinates, 
                 ...eventColumnCoordinates 
@@ -60,9 +63,31 @@ const DayPanelEventsContainer = (props: Props) => {
             return eventObjects.concat(newEventObject);
     }, initialValue);
 
+    console.log(eventObjects);
 
     return (
-        <div className='DayPanelEventsContainer'></div>
+        <div className='DayPanelEventsContainer'>
+            {eventObjects.map(eventObj => 
+                <DayPanelEvent 
+                    event={eventObj.event}
+                    style={{ 
+                        gridColumn: `${eventObj.columnStart} / ${eventObj.columnEnd}`, 
+                        gridRow: `${eventObj.rowStart} / ${eventObj.rowEnd}`, 
+                        backgroundColor: eventObj.event.color 
+                    }}
+                    selection={props.selection}
+                    eventFormData={props.eventFormData}
+                    editEventMode={props.editEventMode}
+                    createEventMode={props.createEventMode}
+                    timeSelectMode={props.timeSelectMode}
+                    setSelection={props.setSelection}
+                    setTimeSelectMode={props.setTimeSelectMode}
+                    updateEventFormProperty={props.updateEventFormProperty}
+                    stageEventEdit={props.stageEventEdit}
+                    endEventEdit={props.endEventEdit}
+                />
+            )}
+        </div>
     );
 };
 

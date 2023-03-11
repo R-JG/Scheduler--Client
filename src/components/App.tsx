@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Event, EventFormData, Selection, TimeSelectMode } from '../typeUtils/types';
 import { 
-    generateCalendarDates, 
-    getRandomHSLColor, 
-    convertDbFormatToEvent, 
-    convertNewEventToDbFormat 
+    generateCalendarDates, getRandomHSLColor, convertDbFormatToEvent, convertNewEventToDbFormat 
 } from '../helpers';
 import { middleCalendarDateNum,millisecondsInADay } from '../constants';
 import eventsService from '../services/eventsService';
@@ -124,6 +121,22 @@ const App = () => {
         });
     };
 
+    const stageEventEdit = (eventToEdit: Event): void => {
+        if (createEventMode) return;
+        setEventFormData({ ...eventToEdit });
+        setEditEventMode(true);
+    };
+
+    const editEvent = () => {};
+
+    const endEventEdit = (): void => {
+        clearEventFormData();
+        setTimeSelectMode({ start: false, end: false });
+        setEditEventMode(false);
+    };
+
+    const deleteEvent = () => {};
+
     return (
         <main className='App'>
             <CalendarContainer 
@@ -163,7 +176,11 @@ const App = () => {
                 createEventMode={createEventMode}
                 timeSelectMode={timeSelectMode}
                 setSelection={setSelection}
+                setTimeSelectMode={setTimeSelectMode}
+                updateEventFormProperty={updateEventFormProperty}
                 updateEventFormTimes={updateEventFormTimes}
+                stageEventEdit={stageEventEdit}
+                endEventEdit={endEventEdit}
             />
         </main>
     );
