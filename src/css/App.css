@@ -39,9 +39,9 @@ button:active {
 }
   
 .active-button {
-    color: cadetblue;
+    color: var(--accent-color);
     background-color: rgba(135, 225, 255, 0.3);
-    border-color: cadetblue;
+    border-color: var(--accent-color);
     opacity: 0.8;
 }
 

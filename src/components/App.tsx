@@ -126,6 +126,12 @@ const App = () => {
         setEditEventMode(true);
     };
 
+    const endEventEdit = (): void => {
+        clearEventFormData();
+        setTimeSelectMode({ start: false, end: false });
+        setEditEventMode(false);
+    };
+
     const editEvent = () => {
         if (!eventFormData.eventId) return;
         const editedEvent = validation.parseEvent({ ...eventFormData });
@@ -137,14 +143,9 @@ const App = () => {
                 setEvents(events.map(event => 
                     (event.eventId === updatedEvent.eventId) ? updatedEvent : event
                 ));
+                endEventEdit();
             } else return console.log('updated event is undefined');
         });
-    };
-
-    const endEventEdit = (): void => {
-        clearEventFormData();
-        setTimeSelectMode({ start: false, end: false });
-        setEditEventMode(false);
     };
 
     const deleteEvent = (eventId: string): void => {
@@ -154,6 +155,7 @@ const App = () => {
                 setEvents(events.filter(
                     event => (event.eventId !== deletedDbEvent.eventId)
                 ));
+                endEventEdit();
             } else return console.log('deleted event is undefined');
         });
     };

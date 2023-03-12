@@ -37,7 +37,9 @@ const DayPanelContainer = (props: Props) => {
     useEffect(() => {
         if (((props.selection.type === 'date') 
         && (props.selection.source !== 'DayPanel')) 
-        && (props.editEventMode === false)) {
+        && (!props.editEventMode 
+        || (props.editEventMode 
+        && (props.timeSelectMode.start || props.timeSelectMode.end)))) {
             scrollToDate(props.selection.value);
         };
         if (props.selection.type === 'event') {

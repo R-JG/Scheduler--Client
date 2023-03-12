@@ -1,6 +1,7 @@
 .DayPanelEvent {
     width: 100%;
     border-radius: 0.6em;
+    z-index: 100;
     pointer-events: all;
     cursor: pointer;
 }
@@ -12,7 +13,6 @@
     padding: 1.5em;
     border-radius: 0.6em;
     position: relative;
-    z-index: 100;
     display: flex;
     flex-direction: column;
     overflow: scroll;
