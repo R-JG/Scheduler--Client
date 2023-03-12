@@ -1,6 +1,8 @@
 .CalendarEvent {
     box-sizing: border-box;
     height: 1.5em;
+    width: 100%;
+    padding-inline: 1em;
     border: 0.2em solid transparent;
     border-radius: 0.7em;
     position: relative;
@@ -11,11 +13,16 @@
     pointer-events: all;
     user-select: none;
     cursor: pointer;
+
+    overflow: hidden;
 }
 
 .calendar-event-title {
     font-size: 0.75em;
-    margin-inline: 1em;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .selected-event {

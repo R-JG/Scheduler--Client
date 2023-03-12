@@ -12,10 +12,9 @@
 }
 
 .day-panel-hour {
-    height: var(--hour-height);
-    /*border: 0.075em solid #272d2d;*/
-    outline: var(--panel-item-outline);
     box-sizing: border-box;
+    height: var(--hour-height);
+    outline: var(--panel-item-outline);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

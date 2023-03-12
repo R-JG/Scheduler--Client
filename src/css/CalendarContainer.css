@@ -14,7 +14,7 @@
     position: absolute;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(var(--calendar-width-ammount), 1fr);
+    grid-template-rows: repeat(var(--calendar-height-ammount), 1fr);
     overflow: hidden;
 }

@@ -1,5 +1,7 @@
 .EventCreationPanel {
     box-sizing: border-box;
+    min-height: min-content;
+    max-height: max-content;
     width: var(--main-panel-width);
     grid-area: event-creation-panel;
 }

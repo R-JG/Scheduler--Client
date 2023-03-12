@@ -66,8 +66,6 @@ const DayPanelEventsContainer = (props: Props) => {
             return eventObjects.concat(newEventObject);
     }, initialValue);
 
-    console.log(eventObjects);
-
     return (
         <div className='DayPanelEventsContainer'>
             {eventObjects.map(eventObj => 

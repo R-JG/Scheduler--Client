@@ -34,9 +34,9 @@ const CalendarEvent = (props: Props) => {
             onClick={handleEventClick}
         >
             {props.eventObject.isFirstRow && 
-            <div className='calendar-event-title'>
+            <span className='calendar-event-title'>
                 {props.eventObject.event.title}
-            </div>}
+            </span>}
         </div>
     );
 };

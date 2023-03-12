@@ -1,6 +1,6 @@
 .DayPanelContainer {
     box-sizing: border-box;
-    max-height: var(--main-panel-height);
+    max-height: 100%;
     width: var(--main-panel-width);
     margin-inline: 1em;
     border-radius: var(--main-panel-border-radius);
