@@ -37,7 +37,8 @@ const DayPanelEventsContainer = (props: Props) => {
                 && (newRowCoordinates.rowStart < prevEventObj.rowEnd))
                 && ((possibleEnd > prevEventObj.columnStart) 
                 && (possibleStart < prevEventObj.columnEnd))) 
-                    ? columnCount + 1 : columnCount
+                    ? columnCount + (prevEventObj.columnEnd - prevEventObj.columnStart) 
+                    : columnCount;
             }, 1);
             const columnEnd: number = columnStart + columnWidth;
             return { columnStart, columnEnd };
