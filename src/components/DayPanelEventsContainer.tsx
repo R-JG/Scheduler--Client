@@ -44,19 +44,13 @@ const DayPanelEventsContainer = (props: Props) => {
             return { columnStart, columnEnd };
     };
 
-    const initialValue: DayPanelEventObject[] = [];
-    const eventObjects: DayPanelEventObject[] = props.eventsOnCalendar.reduce(
-        (eventObjects, event) => {
+    const getBaseEventObjects = (): DayPanelEventObject[] => 
+        props.eventsOnCalendar.reduce<DayPanelEventObject[]>((eventObjects, event) => {
             const eventRowCoordinates: RowCoordinates = props.getGridRowCoordinates(
                 event.start, event.end
             );
-            const isExpanded: boolean = (
-                ((props.selection.type === 'event') 
-                && (props.selection.value.eventId === event.eventId)
-                || (props.editEventMode && (props.eventFormData.eventId === event.eventId)))
-            );
             const eventColumnCoordinates: ColumnCoordinates = getGridColumnCoordinates(
-                eventObjects, eventRowCoordinates, isExpanded
+                eventObjects, eventRowCoordinates, false
             );
             const newEventObject: DayPanelEventObject = { 
                 event, 
@@ -64,7 +58,41 @@ const DayPanelEventsContainer = (props: Props) => {
                 ...eventColumnCoordinates 
             };
             return eventObjects.concat(newEventObject);
-    }, initialValue);
+    }, []);
+
+    const getEventObjects = (): DayPanelEventObject[] => {
+        const baseEventObjects: DayPanelEventObject[] = getBaseEventObjects();
+        if (!((props.selection.type === 'event') 
+        || (props.editEventMode && props.eventFormData.eventId))) {
+            return baseEventObjects;
+        };
+        const updatedEventObjects: DayPanelEventObject[] = baseEventObjects
+            .sort((a, b) => (a.columnStart > b.columnStart) ? 1 : -1)
+            .reduce<DayPanelEventObject[]>((eventObjects, baseEventObj) => {
+                const isExpanded: boolean = (
+                    ((props.selection.type === 'event') 
+                    && (props.selection.value.eventId === baseEventObj.event.eventId)
+                    || (props.editEventMode 
+                    && (props.eventFormData.eventId === baseEventObj.event.eventId)))
+                );
+                const rowCoordinates: RowCoordinates = { 
+                    rowStart: baseEventObj.rowStart,
+                    rowEnd: baseEventObj.rowEnd
+                };
+                const newColumnCoordinates: ColumnCoordinates = getGridColumnCoordinates(
+                    eventObjects, rowCoordinates, isExpanded
+                );
+                const newEventObj: DayPanelEventObject = {
+                    ...baseEventObj,
+                    columnStart: newColumnCoordinates.columnStart,
+                    columnEnd: newColumnCoordinates.columnEnd
+                };
+                return eventObjects.concat(newEventObj);
+            }, []);
+        return updatedEventObjects;
+    };
+
+    const eventObjects = getEventObjects();
 
     return (
         <div className='DayPanelEventsContainer'>

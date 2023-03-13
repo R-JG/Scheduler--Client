@@ -77,6 +77,7 @@ const DayPanelEvent = (props: Props) => {
     return (
         <div 
             className='DayPanelEvent'
+            id={`${props.event.eventId}`}
             style={props.style}
             onClick={handleEventClick}
         >

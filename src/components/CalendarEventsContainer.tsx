@@ -47,8 +47,7 @@ const CalendarEventsContainer = (props: Props) => {
 
     const eventObjectsPerEvent: CalendarEventObject[] = props.eventsOnCalendar.map(event => {
         const eventDateCoordinates: DateGridItem[] = getDateCoordinatesForEvent(event);
-        const initialValue: CalendarEventObject[] = [];
-        const eventObjects: CalendarEventObject[] = eventDateCoordinates.reduce(
+        const eventObjects: CalendarEventObject[] = eventDateCoordinates.reduce<CalendarEventObject[]>(
             (eventObjectsArray, dateCoordinates) => {
                 const latestElIndex: number = eventObjectsArray.length - 1;
                 if ((eventObjectsArray.length > 0) 
@@ -65,7 +64,7 @@ const CalendarEventsContainer = (props: Props) => {
                         createEventObject(event, dateCoordinates, (eventObjectsArray.length === 0))
                     );
                 };
-        }, initialValue);
+        }, []);
         return eventObjects;
     }).flat();
 

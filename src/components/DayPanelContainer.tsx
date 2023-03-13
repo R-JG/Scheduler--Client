@@ -68,14 +68,14 @@ const DayPanelContainer = (props: Props) => {
     const eventsContainerIndex: number = 0;
 
     const scrollToEvent = (event: Event): void => {
-        const eventIndex = props.eventsOnCalendar.findIndex(eventOnCalendar => (
-            event.eventId === eventOnCalendar.eventId
-        ));
-        if (!dayPanelRef.current) return;
-        dayPanelRef.current.children[eventsContainerIndex].children[eventIndex]
-            .scrollIntoView(
-                { behavior: 'smooth', block: 'start' }
-        );
+        props.eventsOnCalendar.forEach((_, index) => {
+            if (!dayPanelRef.current) return;
+            const childElement: Element | null = dayPanelRef
+                .current.children[eventsContainerIndex].children.item(index);
+            if (event.eventId === childElement?.id) {
+                childElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+        });
     };
 
     // assumes that the id is a string consisting in a date in milliseconds, a space, and an hour number.
