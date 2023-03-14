@@ -1,5 +1,5 @@
 import { useRef, useEffect, MouseEvent } from 'react';
-import { Event, Selection, EventFormData, TimeSelectMode, RowCoordinates} from '../typeUtils/types';
+import { Event, Selection, EventFormData, TimeSelectMode, RowCoordinates } from '../typeUtils/types';
 import { totalCalendarDatesNum, hoursPerHourBlock, millisecondsInAnHour } from '../constants';
 import DayPanelHourBlock from './DayPanelHourBlock';
 import DayPanelEventsContainer from './DayPanelEventsContainer';
@@ -42,9 +42,6 @@ const DayPanelContainer = (props: Props) => {
         && (props.timeSelectMode.start || props.timeSelectMode.end)))) {
             scrollToDate(props.selection.value);
         };
-        if (props.selection.type === 'event') {
-            scrollToEvent(props.selection.value);
-        };
     }, [props.selection]);
 
 
@@ -63,19 +60,6 @@ const DayPanelContainer = (props: Props) => {
             .scrollIntoView(
                 { behavior: 'smooth', block: 'start' }
         );
-    };
-
-    const eventsContainerIndex: number = 0;
-
-    const scrollToEvent = (event: Event): void => {
-        props.eventsOnCalendar.forEach((_, index) => {
-            if (!dayPanelRef.current) return;
-            const childElement: Element | null = dayPanelRef
-                .current.children[eventsContainerIndex].children.item(index);
-            if (event.eventId === childElement?.id) {
-                childElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            };
-        });
     };
 
     // assumes that the id is a string consisting in a date in milliseconds, a space, and an hour number.

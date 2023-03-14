@@ -1,4 +1,4 @@
-import { FormEvent, ChangeEvent, MouseEvent } from 'react';
+import { useRef, useEffect, FormEvent, ChangeEvent, MouseEvent } from 'react';
 import { Event, Selection, EventFormData, TimeSelectMode, EventStyle } from '../typeUtils/types';
 import '../css/DayPanelEvent.css';
 
@@ -21,6 +21,14 @@ interface Props {
 
 const DayPanelEvent = (props: Props) => {
 
+    const eventRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (props.selection.type === 'event') {
+            scrollToEvent();
+        };
+    }, [props.selection]);
+
     const eventIsSelected: boolean = (
         (props.selection.type === 'event') 
         && (props.selection.value.eventId === props.event.eventId) 
@@ -30,6 +38,14 @@ const DayPanelEvent = (props: Props) => {
     const eventIsBeingEdited: boolean = (
         props.editEventMode && (props.eventFormData.eventId === props.event.eventId)
     );
+
+    const scrollToEvent = (): void => {
+        if (!eventRef.current) return;
+        if ((props.selection.type === 'event') 
+        && (props.selection.value.eventId === props.event.eventId)) {
+            eventRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest'});
+        };
+    };
 
     const handleEventClick = (): void => {
         if ((props.selection.type === 'event') 
@@ -78,6 +94,7 @@ const DayPanelEvent = (props: Props) => {
         <div 
             className='DayPanelEvent'
             id={`${props.event.eventId}`}
+            ref={eventRef}
             style={props.style}
             onClick={handleEventClick}
         >

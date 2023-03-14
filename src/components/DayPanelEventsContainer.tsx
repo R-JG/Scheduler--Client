@@ -66,7 +66,7 @@ const DayPanelEventsContainer = (props: Props) => {
         || (props.editEventMode && props.eventFormData.eventId))) {
             return baseEventObjects;
         };
-        const updatedEventObjects: DayPanelEventObject[] = baseEventObjects
+        const updatedEventObjectCoordinates: DayPanelEventObject[] = [...baseEventObjects]
             .sort((a, b) => (a.columnStart > b.columnStart) ? 1 : -1)
             .reduce<DayPanelEventObject[]>((eventObjects, baseEventObj) => {
                 const isExpanded: boolean = (
@@ -89,10 +89,18 @@ const DayPanelEventsContainer = (props: Props) => {
                 };
                 return eventObjects.concat(newEventObj);
             }, []);
-        return updatedEventObjects;
+            const reorderedEventObjects = props.eventsOnCalendar.map((eventObject, index) => {
+                const newCoordinates: DayPanelEventObject | undefined = updatedEventObjectCoordinates
+                    .find(eventCoordinates => 
+                        (eventCoordinates.event.eventId === eventObject.eventId)
+                );
+                return newCoordinates ? newCoordinates : baseEventObjects[index];
+            });
+        return reorderedEventObjects;
     };
 
     const eventObjects = getEventObjects();
+
 
     return (
         <div className='DayPanelEventsContainer'>
